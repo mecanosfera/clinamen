@@ -1,13 +1,34 @@
 class Decorator extends Node{
 
-	init(args){
-		this.child=null;
-		if(args[0] instanceof Node){
-			this.child = args[0];
-		} else {
-			this.load(args);
-		}
+	init(node){
+		super.init(node);
+		this.type="decorator";
+	}
 
+	setChildren(node){
+		if(node.child!=null){
+			this.add(node.child);
+		} else {
+			this.child = null;
+		}
+	}
+
+	setAgent(agent){
+		if(agent!=null){
+			this.agent = agent;
+			if(this.child!=null){
+				this.child.setAgent(agent);
+			}
+		}
+	}
+
+	add(node){
+		var c = node;
+		if(!(node instanceof Node)){
+			c = new (getClass(node.type))(node);
+		}
+		c.setAgent(this.agent);
+		this.child = c;
 	}
 
 }
@@ -15,40 +36,58 @@ class Decorator extends Node{
 
 class Inverter extends Decorator{
 
+	init(node){
+		super.init(node);
+		this.type="inverter";
+	}
+
 	run(){
+		if(this.child==null){
+			return false;
+		}
 		return !this.child.run();
 	}
+
 }
+
+//----------------------------------------
 
 class Limit extends Decorator{
 
-	init(runLimit, args){
-		super.init(args);
-		this.runLimit = runLimit;
-		this.runSoFar = 0;
+	init(node){
+		super.init(node);
+		this.max = node.max;
+		this.runs = 0;
+		this.type="limit";
 	}
 
 	run(){
-		if(this.runSoFar>=this.runLimit){
+		if(this.child==null){
 			return false;
 		}
-		this.runSoFar++;
-
+		if(this.runs>=this.max){
+			return false;
+		}
+		this.runs++;
 		return this.child.run();
 	}
 
 }
 
+//--------------------------------------------------
 
 class Condition extends Decorator{
 
-	init(...args){
-		super.init(args[1],args[0]);
-		this.condition = args[0];
-		//{op:"==",obj1:[self,hp],obj2:[enemy,hp]}
+	init(node){
+		super.init(node);
+		this.condition = node.condition;
+		this.type="condition";
 	}
 
 	run(){
+		if(this.child==null){
+			return false;
+		}
 		if(this.testCondition()){
 			return this.child.run();
 		}
@@ -56,7 +95,66 @@ class Condition extends Decorator{
 	}
 
 	testCondition(){
-		return op[this.condition["op"]](objects[this.condition["obj1"][0]][this.condition["obj1"][1]],objects[this.condition["obj2"][0]][this.condition["obj2"][1]]))
-		//return false;
+		var oper = op[this.condition[0]];
+		var a = this.condition[1];
+		var b = this.condition[2];
+		var a_val = a;
+		var b_val = b;
+
+		if(a instanceof Object){
+			if(a.type=="self"){
+				if(!this.agent.attr[[a.prop]]){
+					return false;
+				} else {
+					a_val = this.agent.attr[[a.prop]];
+				}
+			} else {
+				var ag = this.agent.findAgent(a.type,[a.cap]);
+				if(ag!=null){
+					if(!ag.attr[[a.prop]]){
+						return false;
+					} else {
+						a_val = ag.attr[[a.prop]];
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		if(b instanceof Object){
+			if(b.type=="self"){
+				if(!this.agent.attr[[b.prop]]){
+					return false;
+				} else {
+					b_val = this.agent.attr[[b.prop]];
+				}
+			} else {
+				var ag = this.agent.findAgent(b.type,[b.cap]);
+				if(ag!=null){
+					if(!ag.attr[[b.prop]]){
+						return false;
+					} else {
+						b_val = ag.attr[[b.prop]];
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		return oper(a_val,b_val);
 	}
 }
+
+
+
+
+/*
+["==",{type:"self",prop:"hp"},56]
+["==",{type:"enemy",cap:"nearest",attr:"hp"},10]
+
+
+*/
+	//["==",5,6]
+	//[">=",[self,hp],35]
+	//["==",nearest,enemy]
+	//

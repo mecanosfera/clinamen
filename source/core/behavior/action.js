@@ -1,21 +1,34 @@
 class Action extends Node{
 
-	init(args){
-		super.init();
+	init(node){
+		super.init(node);
+		this.type="action";
+		this.target = null;
+		this.condition = null;
+		this.act = null;
 
-		if(args[0] instanceof Agent){
-			this.agent = args[0];
-			this.target = args[1];
-			this.condition = args[2];
-			this.task = args[3];
-		} else {
-			this.load(args);
+		if(node.target!=null){
+			this.target = node.target;
+		}
+		if(node.condition!=null){
+			this.condition = node.condition;
+		}
+		if(node.act!=null){
+			this.act = node.act;
 		}
 	}
 
-	run(){
-		return this.agent.act(this.task,this.target,this.condition);
+	setChildren(node){
+		this.children = null;
 	}
 
+	add(node){
+		return false;
+	}
+
+	run(){
+		//alert(this.act);
+		return this.agent.act(this.act,this.target,this.condition);
+	}
 
 }

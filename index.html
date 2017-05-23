@@ -1,25 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Clinamen</title>
+<title>clinamen</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 	<link type="text/css" rel="stylesheet" href="css/global.css" />
+	<link type="text/css" rel="stylesheet" href="css/simulation.css" />
+	<link type="text/css" rel="stylesheet" href="css/editor.css" />
 	<script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
-	<!--  script type="text/javascript" src="modulos/glider.js"></script-->
-	
+	<script type="text/javascript" src="source/core/functions.js"></script>
+	<script type="text/javascript" src="source/core/entity.js"></script>
+	<script type="text/javascript" src="source/core/behavior/node.js"></script>
+	<script type="text/javascript" src="source/core/behavior/decorator.js"></script>
+	<script type="text/javascript" src="source/core/behavior/action.js"></script>
+	<script type="text/javascript" src="source/core/behavior/iagent.js"></script>
+	<script type="text/javascript" src="source/simulation/world.js"></script>
+	<script type="text/javascript" src="source/simulation/agent.js"></script>
+	<script type="text/javascript" src="source/simulation/ui_simulation.js"></script>
+	<script type="text/javascript" src="source/editor/ui_editor.js"></script>
+	<script type="text/javascript" src="source/editor/editor.js"></script>
+
+
 </head>
 
 <body>
 	<main>
-		<canvas id="world"></canvas>
-		<nav id="menu"></nav>
-	</main>
-	
+		<nav id="top">
+			<a>clinamen</a>
+			<div id="status">[stopped]</div>
+			<div id="controls">
+					<a id="stop"></a>
+					<a id="play"></a>
+					<a id="pause"></a>
+			</div>
+		</nav>
 
+		<!-- SIMULATION -->
+
+		<section id="simulation">
+			<canvas id="world_grid"></canvas>
+		</section>
+
+		<!-- EDITOR -->
+
+		<section id="editor">
+
+			<!-- START EDITOR -->
+
+			<div id="editor_main_start">
+				<ul id="menu_start_editor">
+					<li id="bt_criar_mundo">Criar Mundo</li>
+					<li id="bt_abrir_mundo">Abrir Mundo</li>
+					<li id="bt_criar_mundo">Criar Agente</li>
+					<li id="bt_abrir_mundo">Abrir Agente</li>
+					<li id="bt_criar_mundo">Criar Comportamento</li>
+					<li id="bt_abrir_mundo">Abrir Comportamento</li>
+				</ul>
+			</div>
+
+			<!-- WORLD -->
+
+			<div id="editor_main_edit_world">
+				<div id="editor_info_world">
+					<label>Mundo: </label><span id="editor_world_name"></span>
+					<label>Tamanho: </label><span id="editor_world_size"></span>
+				</div>
+				<canvas id="editor_world_grid"></canvas>
+			</div>
+
+			<!-- BEHAVIOR/AGENT -->
+
+			<div id="editor_main_behavior">
+				<div id="editor_info_behavior"></div>
+				<div id="editor_area_behavior"></div>
+				<div id="editor_area_agent">
+					<div id="editor_info_agent"></div>
+					<ul id="agent_prop"></ul>
+				<div>
+			</div>
+			<nav id="info_editor"></na>
+		</section>
+
+	</main>
+
+<script type="text/javascript">
+	var ratio = parseInt(window.innerWidth-250/(window.innerHeight-40));
+	//var uui = new UI({X:20*ratio,Y:20});
+
+	var ed_ui = new EditorUI({editor:new Editor({})});
+	ed_ui.start();
+
+
+	var ag = new Agent({world: new World({})});
+	ag.addTree(new Selector({
+		children: [
+			new Selector({
+				children:[
+					new Condition({
+						condition:["==",{type:"self",prop:"hp"},35],
+						child: new Action({
+							target:"self",
+							act:"teste"
+						})
+					}),
+					new Action({
+						target:"self",
+						act: "heal"
+					})
+				]
+			}),
+			new Action({
+				target:"self",
+				act: "heal"
+			})
+		]
+	}));
+
+	ag.hp=34;
+
+
+	//ag.tree.run();
+
+</script>
 
 </body>
 </html>
-
-
