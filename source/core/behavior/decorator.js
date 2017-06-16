@@ -25,10 +25,18 @@ class Decorator extends Node{
 	add(node){
 		var c = node;
 		if(!(node instanceof Node)){
-			c = new (getClass(node.type))(node);
+			c = NodeConstructor(node);
 		}
 		c.setAgent(this.agent);
 		this.child = c;
+	}
+
+	toChart(){
+		var js = {
+			text: {name: this.type},
+			children:[this.child.toChart()]
+		}
+		return js;
 	}
 
 }
@@ -103,18 +111,18 @@ class Condition extends Decorator{
 
 		if(a instanceof Object){
 			if(a.type=="self"){
-				if(!this.agent.attr[[a.prop]]){
+				if(!this.agent.prop[[a.prop]]){
 					return false;
 				} else {
-					a_val = this.agent.attr[[a.prop]];
+					a_val = this.agent.prop[[a.prop]];
 				}
 			} else {
 				var ag = this.agent.findAgent(a.type,[a.cap]);
 				if(ag!=null){
-					if(!ag.attr[[a.prop]]){
+					if(!ag.prop[[a.prop]]){
 						return false;
 					} else {
-						a_val = ag.attr[[a.prop]];
+						a_val = ag.prop[[a.prop]];
 					}
 				} else {
 					return false;
@@ -123,18 +131,18 @@ class Condition extends Decorator{
 		}
 		if(b instanceof Object){
 			if(b.type=="self"){
-				if(!this.agent.attr[[b.prop]]){
+				if(!this.agent.prop[[b.prop]]){
 					return false;
 				} else {
-					b_val = this.agent.attr[[b.prop]];
+					b_val = this.agent.prop[[b.prop]];
 				}
 			} else {
 				var ag = this.agent.findAgent(b.type,[b.cap]);
 				if(ag!=null){
-					if(!ag.attr[[b.prop]]){
+					if(!ag.prop[[b.prop]]){
 						return false;
 					} else {
-						b_val = ag.attr[[b.prop]];
+						b_val = ag.prop[[b.prop]];
 					}
 				} else {
 					return false;

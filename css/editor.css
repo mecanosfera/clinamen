@@ -1,6 +1,279 @@
 #editor{
-  background-color: #ff0000;
+  background-color: #fff;
   margin: 0px;
   padding: 0px;
   float: left;
+  font-family: Inconsolata, Courier;
+}
+
+#editor .editor_main{
+  float: left;
+}
+
+#editor_entity{
+  float: left;
+  width: 238px;
+  background-color: #666;
+  border-left: 1px solid #333;
+  /*border-right: 1px solid #333;*/
+  padding: 5px;
+  padding-top: 0px;
+  padding-left: 10px;
+  color: #ccc;
+}
+
+#editor_entity input{
+  border: 1px solid #333;
+  background-color: #3d3d3d;
+  padding: 2px;
+  min-width: 40px;
+  width: 40px;
+  color: #ccc;
+}
+
+#editor_entity span, #editor_entity a{
+  color: #ccc;
+  text-decoration: none;
+}
+
+#editor_entity a{
+  font-weight: bold;
+}
+
+#editor_entity ul{
+  padding: 0px;
+  margin: 0px;
+}
+
+#editor_entity li{
+  padding: 5px;
+  list-style: none;
+  margin: 0px;
+  padding-left: 0px;
+}
+
+#editor_entity label{
+  color: #fff;
+}
+
+#editor_entity ul#editor_agent_properties_fields, #editor_entity ul#editor_agent_tree_fields{
+  padding-left: 10px;
+}
+
+#editor_entity #editor_entity_type_icon{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+#editor_entity #editor_entity_type_icon.agent{
+  background-image: url('../img/agent_white.png');
+}
+
+#editor_entity #editor_entity_type_icon.tree{
+  background-image: url('../img/tree_green.png');
+}
+
+#editor_entity #editor_entity_type_icon.empty_cell{
+  background-image: url('../img/empty_cell_white.png');
+}
+
+#editor_tree_edit a{
+  text-decoration: none;
+}
+
+#editor_tree_edit li, #editor_tree_edit div{
+  display: inline-block;
+}
+
+#editor_tree_edit, #editor_tree_edit ul{
+  padding: 0px;
+  text-align: center;
+}
+
+
+
+#editor_tree_edit li{
+  list-style: none;
+  padding: 2px;
+  border: 1px solid #999;
+  margin: 3px;
+  border-radius: 3px;
+}
+
+#editor_tree_edit .edit{
+  display: none;
+}
+
+#editor_tree_edit .node.selector{
+  background-color: #ccc;
+}
+
+#editor_tree_edit .node.condition{
+  background-color: #666;
+}
+
+#editor_tree_edit .node.action{
+  background-color: #fff;
+}
+
+#editor_tree_edit .node.condition div.view{
+  display: block;
+}
+
+#editor_tree_edit .item_node_view_operator{
+  border-radius: 15px;
+  font-weight: bold;
+  padding: 3px;
+  font-size: 12px;
+  text-align: center;
+  color: #333;
+  border: 1px solid #333;
+  background-color: #ccc;
+}
+
+
+#library{
+  width: 250px;
+  background-color: #3d3d3d;
+  /*border: 1px solid #3d3d3d;*/
+  float: right;
+  color: #fff;
+  /*padding: 10px;
+  padding-top: 0px;*/
+  padding:0px;
+  padding-left: 5px;
+  border-left: 1px solid #333;
+}
+
+#library h3, #editor_entity #editor_entity_header{
+  background-color: #000;
+  font-size: 16px;
+  padding: 8px;
+  margin: 0px;
+  font-size: 14px;
+  padding-left: 10px;
+  color: #fff;
+}
+
+#library h3{
+  margin-left: -5px;
+}
+
+#editor_entity #editor_entity_header{
+  margin-left: -10px;
+  margin-right: -5px;
+  font-size: 16px;
+}
+
+#editor_entity_header label{
+  font-weight: bold;
+}
+
+#editor_entity_header a{
+  font-weight: normal;
+}
+
+
+#editor_tree_edit{
+
+}
+
+#library ul{
+  padding: 0px;
+  padding-left: 10px;
+
+}
+
+#library #library_list {
+  padding: 10px;
+  margin: 0px;
+  /*border: 1px solid #333;*/
+}
+
+#library ul li{
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  font-size: 14px;
+  vertical-align: top;
+  padding: 5px;
+  padding-left: 0px;
+  /*display: inline-block;
+  text-align:center;
+  border-radius: 5px;*/
+}
+
+#library ul li span.icon_entity{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+
+#library ul li a{
+  color: #fff;
+  text-decoration: none;
+  height: 15px;
+  font-size: 15px;
+  margin: 5px;
+  margin-top: 0px;
+  vertical-align: top;
+}
+
+#library ul li span.icon_entity{
+  background-image: url('../img/tree_green.png');
+}
+
+#library ul li span.icon_entity.world{
+  background-image: url('../img/world_grey.png');
+}
+
+#library ul li span.icon_entity.agent{
+  background-image: url('../img/agent_white.png');
+}
+
+/*#library li.world{
+  background-color: #000;
+}
+
+#library li.agent{
+  background-color: #ccc;
+}
+
+#library li.selector{
+  background-color: #ff00ff;
+}
+
+#library li.condition{
+  background-color: #ff0000;
+}
+
+#library li.action{
+  background-color: #fff;
+}*/
+
+
+#editor_info_world{
+  background-color: #000;
+  color: #fff;
+  padding: 8px;
+  padding-left: 10px;
+  font-size: 14px;
+}
+
+#editor_info_world label{
+  font-weight: bold;
+  padding: 0px;
+}
+
+#editor_info_world span{
+  display: inline-block;
+  margin-right: 30px;
+  font-size: 14px;
+}
+
+#editor_world_grid{
+  margin: 10px;
+  border: 1px solid #666;
 }

@@ -123,24 +123,28 @@ function or(a,b){
 }
 
 
-function getClass(type){
-	switch(type){
+function NodeConstructor(node){
+	switch(node.type.toLowerCase()){
 		case "selector":
-			return Selector;
+			return new Selector(node);
 		case "sequence":
-			return Sequence;
+			return new Sequence(node);
 		case "randomSelector":
-			return RandomSelector;
+			return new RandomSelector(node);
 		case "randomSequence":
-			return RandomSequence;
+			return new RandomSequence(node);
 		case "inverter":
-			return Inverter;
+			return new Inverter(node);
 		case "limit":
-			return Limit;
-		case "condititon":
-			return Condition;
+			return new Limit(node);
+		case "condition":
+			return new Condition(node);
 		case "action":
-			return action;
+			return new Action(node);
 	}
 	return null;
+}
+
+function getClass(type){
+
 }

@@ -35,7 +35,7 @@ class Node extends Entity{
 	add(node){
 		var c = node;
 		if(!(node instanceof Node)){
-			c = new getClass(node.type)(node);
+			c = NodeConstructor(node);
 		}
 		c.setAgent(this.agent);
 		this.children.push(c);
@@ -55,6 +55,19 @@ class Node extends Entity{
 		}
 		for(let c of this.children){
 			js.children.push(c.toJson());
+		}
+		return js;
+	}
+
+	toChart(){
+		var js = {
+			text: {name: this.type},
+			children:[]
+		};
+		if(this.children!=null){
+			for(let c of this.children){
+				js.children.push(c.toChart());
+			}
 		}
 		return js;
 	}

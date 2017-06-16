@@ -7,12 +7,13 @@ class Editor {
   init(args){
     this.worlds = [];
     this.agents = [];
-    this.trees = [];
+    this.behaviors = [];
     this.simulation = null;
+    this.selectedPosition = [-1,-1];
 
     this.world;
-    this.mainAgent;
-    this.mainTree;
+    this.agent;
+    this.tree;
 
     if(args.worlds!=null){
       this.worlds = args.worlds;
@@ -20,33 +21,108 @@ class Editor {
     if(args.simulation!=null){
       this.simulation = args.simulation;
     }
-    this.state = "start";
-
-    this.states = {
-      "start": this.start,
-      "select": this.select,
-      "edit": this.edit,
-      "test": this.test,
-      "end": this.end
-    };
+    this.open = [];
   }
 
   start(){}
 
   select(){}
 
-  edit(){}
+  edit(entity,type){
+    if(type=="world"){
+      this.world = entity;
+      if(entity==null){
+        this.world = new World(teste1);
+      }
+    } else if (type=="agent"){
+      this.agent = entity;
 
-  test(){}
-
-  end(){}
-
-  editWorld(world){
-    this.world = world;
-    if(world==null){
-      this.world = new World({});
+      if(entity==null){
+        this.agent = new Agent({});
+      }
+    } else if (type=="empty_cell") {
+      this.agent = null;
+      this.selectedPosition = entity;
+    } else {
+      this.tree = entity;
     }
-
   }
 
+  generateTreeConfig(node){
+    var chart_config = {
+      chart: {
+        container: '#editor_tree_edit'
+      },
+      nodeStructure: node.toChart()
+    }
+    return chart_config;
+  }
+
+
+
+  update(entity){}
+}
+
+
+var teste1 = {
+	UUID: 34354446546546,
+	type: "world",
+	name: "teste1",
+	size: [20,20],
+	generation: 0,
+	agents: [
+		{
+			UUID: 454554654645654,
+			name: "um",
+			position: [10,15],
+			prop: {
+				hp: 35
+			},
+			tree: {
+				type: "selector",
+				children: [
+          {
+  					type: "condition",
+  					condition: ["==",{target:"self",prop:"hp"},25],
+  					child: {
+  						type: "selector",
+  						children: [
+  							{
+  								type: "action",
+  								act: "move",
+  								target: "enemy",
+  								condition: "nearest"
+  							},
+  							{
+  								type: "action",
+  								act: "wait",
+  								target: "self"
+  							}
+  						]
+  					}
+          },
+          {
+  					type: "condition",
+  					condition: ["==",{target:"self",prop:"hp"},25],
+  					child: {
+  						type: "selector",
+  						children: [
+  							{
+  								type: "action",
+  								act: "move",
+  								target: "enemy",
+  								condition: "nearest"
+  							},
+  							{
+  								type: "action",
+  								act: "wait",
+  								target: "self"
+  							}
+  						]
+  					}
+          }
+				]
+			}
+		}
+	]
 }

@@ -9,17 +9,19 @@
 	<link type="text/css" rel="stylesheet" href="css/simulation.css" />
 	<link type="text/css" rel="stylesheet" href="css/editor.css" />
 	<script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="source/core/functions.js"></script>
 	<script type="text/javascript" src="source/core/entity.js"></script>
 	<script type="text/javascript" src="source/core/behavior/node.js"></script>
 	<script type="text/javascript" src="source/core/behavior/decorator.js"></script>
 	<script type="text/javascript" src="source/core/behavior/action.js"></script>
 	<script type="text/javascript" src="source/core/behavior/iagent.js"></script>
+	<script type="text/javascript" src="source/editor/editor.js"></script>
 	<script type="text/javascript" src="source/simulation/world.js"></script>
 	<script type="text/javascript" src="source/simulation/agent.js"></script>
-	<script type="text/javascript" src="source/simulation/ui_simulation.js"></script>
-	<script type="text/javascript" src="source/editor/ui_editor.js"></script>
-	<script type="text/javascript" src="source/editor/editor.js"></script>
+	<script type="text/javascript" src="source/ui/ui.js"></script>
+	<script type="text/javascript" src="source/ui/ui_editor.js"></script>
+	<script type="text/javascript" src="source/ui/ui_simulation.js"></script>
 
 
 </head>
@@ -37,18 +39,15 @@
 		</nav>
 
 		<!-- SIMULATION -->
-
 		<section id="simulation">
 			<canvas id="world_grid"></canvas>
 		</section>
 
 		<!-- EDITOR -->
-
 		<section id="editor">
 
 			<!-- START EDITOR -->
-
-			<div id="editor_main_start">
+			<div id="editor_main_start" class="editor_main">
 				<ul id="menu_start_editor">
 					<li id="bt_criar_mundo">Criar Mundo</li>
 					<li id="bt_abrir_mundo">Abrir Mundo</li>
@@ -60,26 +59,72 @@
 			</div>
 
 			<!-- WORLD -->
-
-			<div id="editor_main_edit_world">
+			<div id="editor_main_edit_world" class="editor_main">
 				<div id="editor_info_world">
-					<label>Mundo: </label><span id="editor_world_name"></span>
-					<label>Tamanho: </label><span id="editor_world_size"></span>
+					<label>mundo: </label><span id="editor_world_name"></span>
+					<label>tamanho: </label><span id="editor_world_size"></span>
 				</div>
 				<canvas id="editor_world_grid"></canvas>
 			</div>
 
-			<!-- BEHAVIOR/AGENT -->
-
-			<div id="editor_main_behavior">
-				<div id="editor_info_behavior"></div>
-				<div id="editor_area_behavior"></div>
-				<div id="editor_area_agent">
-					<div id="editor_info_agent"></div>
-					<ul id="agent_prop"></ul>
-				<div>
+			<!-- TREE -->
+			<div id="editor_main_edit_tree" class="editor_main">
+				<div id="editor_info_tree">
+					<label>comportamento: </label><span id="editor_tree_name"></span>
+				</div>
+				<ul id="editor_tree_edit"></ul>
 			</div>
-			<nav id="info_editor"></na>
+
+
+
+			<!-- AGENT -->
+			<div id="editor_entity">
+					<div id="editor_entity_header">
+						<span id="editor_entity_type_icon" class="agent"></span><label id="editor_entity_type"></label>:<span id="editor_entity_name"></span> [<a href="#" id="editor_entity_parent"></a>] <a href="#" id="editor_entity_edit">e</a>
+					</div>
+
+					<!-- AGENT -->
+					<div id="editor_agent">
+						<div id="editor_agent_info">
+							<ul id="editor_agent_world_fields">
+								<li><label>posição:<label><span id="editor_agent_position"></span></li>
+							</ul>
+							<label>propriedades</label>
+							<ul id="editor_agent_properties_fields">
+								<!--li><input type="text" value="nome" id="editor_agent_properties_add_name" /> : <input type="text" value="valor" id="editor_agent_properties_add_value" /> <a id="editor_agent_properties_add" href="#">+</a></li>
+								 <li><label></label></li> -->
+							</ul>
+							<label>comportamentos</label>
+							<div id="editor_agent_tree_fields">
+								<ul id="editor_agent_tree"></ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- EMPTY CELL -->
+					<div id="editor_empty_cell">
+						<ul id="editor_empty_cell_info">
+							<li><label>mundo:</label> <span id="editor_empty_cell_world"></span></li>
+							<li><label>posição:</label> <span id="editor_empty_cell_position"></span></li>
+						</ul>
+						<ul id="editor_empty_cell_agent">
+							<li><a href="#" id="editor_empty_cell_agent_new">novo agente</a></li>
+							<li>
+								<a href="#" id="editor_empty_cell_agent_add">adicionar agente</a>
+								<select id="editor_empty_cell_agent_add_select"></select>
+							</li>
+						</ul>
+					</div>
+
+					<!-- TREE -->
+					<div id="editor_tree"></div>
+			</div>
+
+			<!-- SIDE MENU -->
+			<nav id="library">
+				<h3>biblioteca</h3>
+				<ul id="library_list"></ul>
+			</nav>
 		</section>
 
 	</main>
@@ -92,7 +137,7 @@
 	ed_ui.start();
 
 
-	var ag = new Agent({world: new World({})});
+	/*var ag = new Agent({world: new World({})});
 	ag.addTree(new Selector({
 		children: [
 			new Selector({
@@ -115,9 +160,11 @@
 				act: "heal"
 			})
 		]
-	}));
+	}));*/
 
-	ag.hp=34;
+	//alert(ag.tree.type);
+
+	//ag.hp=34;
 
 
 	//ag.tree.run();

@@ -5,11 +5,9 @@ class Agent extends IAgent{
 		this.type="agent";
 		this.world;
 		this.tree;
-		this.position;
+		this.position = [-1,-1];
 		this.color = "#000000";
 		this.sprite;
-		this.prop = {}
-
 
 		if(args.world!=null){
 			this.world = args.world;
@@ -21,17 +19,21 @@ class Agent extends IAgent{
 			this.color = args.color;
 		}
 		if(args.tree!=null){
-			this.addTree(args.tree);
+			this.add(args.tree);
 		}
-		if(args.prop!=null){
-			this.prop = args.prop;
+		if(args.position!=null){
+			this.position = args.position;
 		}
 
 	}
 
-	addTree(tree){
-		this.tree = tree;
-		tree.setAgent(this);
+	add(tree){
+		if(tree instanceof Node){
+			this.tree = tree;
+		} else {
+			this.tree = NodeConstructor(tree);
+		}
+		this.tree.setAgent(this);
 	}
 
 	distance(agent){
