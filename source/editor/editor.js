@@ -74,6 +74,7 @@ var teste1 = {
 		{
 			UUID: 454554654645654,
 			name: "um",
+      template: "teste",
 			position: [10,15],
 			prop: {
 				hp: 35

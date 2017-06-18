@@ -11,6 +11,12 @@ class World extends Entity{
       this.templates = {};
       this.positions = [];
       this.generations = [];
+      this.started = false;
+      this.prop = {
+        numAgents : {
+          total: 0
+        }
+      }
 
       if(args.size!=null){
         this.size = args.size;
@@ -34,63 +40,65 @@ class World extends Entity{
       }
       if(args.agents!=null){
         for(let a of args.agents){
-          this.add(a);
+          this.add(a,a.position);
         }
       }
   }
 
   has(type){
-    if(this.agentsType[type]){
-      return this.agentsType[type].length>0;
+    if(this.started){
+      if(this.agentsType[type]){
+        return this.agentsType[type].length>0;
+      }
+    } else {
+      if(this.templates[type]){
+        return this.agentsType[type].positions.length>0;
+      }
     }
     return false;
   }
 
-  add(agent){
+  add(agent,position){
     var ag = agent;
     if(!(ag instanceof Agent)){
       ag = new Agent(agent);
     }
-    ag.world = this;
-    if(!this.agentsType[ag.type]){
-      this.agentsType[ag.type] = [];
+    if(this.templates[ag.template]==null){
+      this.templates[ag.template] = {
+        agent:ag,
+        positions: []
+      };
+      //alert(this.templates[ag.template].agent.template);
     }
-    this.agents.push(ag);
-    this.agentsType[ag.type].push(ag);
-    if(ag.position[0]>-1){
-      this.positions[ag.position[0]][ag.position[1]] = ag;
-    }
-    this.addTemplate(agent);
-
-  }
-
-  add(agent){
-    
-  }
-
-  addTemplate(agent){
-    if(this.templates[agent.type]==null){
-      this.templates[agent.type] = agent;
-    }
-  }
-
-  generateAgent(type,position){
-    if(this.templates[type]!=null){
-      var ag = new Agent(this.templates[type].toJson());
-      if(!this.agentsType[ag.type]){"op"
-        this.agentsType[ag.type] = [];
+    if(position!=null){
+      this.templates[ag.template].positions.push(position);
+      this.prop.numAgents.total += 1;
+      if(this.prop.numAgents[ag.template]==null){
+        this.prop.numAgents[ag.template] = 0;
       }
-      if(position!=null){
-        ag.position = position;
-        this.positions[ag.position[0]][ag.position[1]] = ag;
-      }
+      this.prop.numAgents[ag.template] += 1;
     }
   }
+
 
   start(){
-
+    for(let tp in this.templates){
+      var js = this.templates[tp].agent.toJson();
+      for(let pos of this.templates[tp].positions){
+        var ag = new Agent(js);
+        ag.position = pos;
+        ag.world = this;
+        if(this.agetsType[ag.template]==null){
+          this.agentsType[ag.template] = [];
+        }
+        this.agentsType[ag.template].push(ag);
+        if(ag.position[0]>-1){
+          this.positions[ag.position[0]][ag.position[1]] = ag;
+        }
+      }
+    }
+    this.started = true;
   }
-
 
 
   remove(){

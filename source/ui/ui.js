@@ -36,10 +36,20 @@ class Grid {
       }
     }
 
-    for(let a of world.agents){
-      this.cxt.fillStyle = '#000000';
-      this.cxt.fillRect(a.position[0]*this.tamanhoCelula,a.position[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
-      this.cxt.strokeRect((a.position[0]*this.tamanhoCelula),(a.position[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
+    if(world.started){
+      for(let a of world.agents){
+        this.cxt.fillStyle = '#000000';
+        this.cxt.fillRect(a.position[0]*this.tamanhoCelula,a.position[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
+        this.cxt.strokeRect((a.position[0]*this.tamanhoCelula),(a.position[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
+      }
+    } else {
+      for(let tp in world.templates){
+        for(let pos of world.templates[tp].positions){
+          this.cxt.fillStyle = '#000000';
+          this.cxt.fillRect(pos[0]*this.tamanhoCelula,pos[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
+          this.cxt.strokeRect((pos[0]*this.tamanhoCelula),(pos[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
+        }
+      }
     }
 
 	}
@@ -100,8 +110,14 @@ class EntityMenu {
           this.add(entity.tree,ul);
         }
     } else if (entity instanceof World){
-        for(let a of entity.agents){
-          this.add(a,ul);
+        if(entity.started){
+          for(let a of entity.agents){
+            this.add(a,ul);
+          }
+        } else {
+          for(let tp in entity.templates){
+            this.add(entity.templates[tp].agent,ul);
+          }
         }
     }
 

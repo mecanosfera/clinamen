@@ -3,6 +3,7 @@ class Agent extends IAgent{
 	init(args){
 		super.init(args);
 		this.type="agent";
+		this.template;
 		this.world;
 		this.tree;
 		this.position = [-1,-1];
@@ -20,6 +21,11 @@ class Agent extends IAgent{
 		}
 		if(args.tree!=null){
 			this.add(args.tree);
+		}
+		if(args.template!=null){
+			this.template = args.template;
+		} else {
+			this.template = this.type;
 		}
 		if(args.position!=null){
 			this.position = args.position;
@@ -84,20 +90,7 @@ class Agent extends IAgent{
 		return true;
 	}
 
-	teste(){
-		alert("xxxx");
-		return true;
-	}
 
-	heal(){
-		alert("heal");
-		if(this.hp<35){
-			this.hp = 35;
-			return true;
-		}
-		alert("heal false");
-		return false;
-	}
 
 	toJson(){
 
