@@ -46,22 +46,17 @@ var op = {
 		"||": function(a,b){return a||b}
 };
 
-var list = {
-	"+": 	function(a){var r = 0; for(n in a){r += n()} return r;},
-	"-": 	function(a){return a-b},
-	"*": 	function(a){return a*b},
-	"/": 	function(a){return a/b},
-	"%": 	function(a){return a%b},
-	"==": function(a){return a==b},
-	"===":function(a){return a===b},
-	"!=":	function(a){return a!=b},
-	"!==":function(a){return a!==b},
-	">":	function(a){return a>b},
-	">=":	function(a){return a>=b},
-	"<":	function(a){return a<b},
-	"<=":	function(a){return a<=b},
-	"&&": function(a){return a&&b},
-	"||": function(a){return a||b}
+var lop = {
+	"==": function(a,b){return a==b},
+	"===":function(a,b){return a===b},
+	"!=":	function(a,b){return a!=b},
+	"!==":function(a,b){return a!==b},
+	">":	function(a,b){return a>b},
+	">=":	function(a,b){return a>=b},
+	"<":	function(a,b){return a<b},
+	"<=":	function(a,b){return a<=b},
+	"&&": function(a,b){return a&&b},
+	"||": function(a,b){return a||b}
 }
 
 

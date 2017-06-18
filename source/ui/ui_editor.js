@@ -109,7 +109,9 @@ class EditorUI {
     } else { //tree
       $("#editor_main_edit_world").hide();
       $("#editor_main_edit_tree").show();
-      this.em.addNode(this.editor.tree, $('#editor_tree_edit'));
+
+      var tree = new NodeUI(this.editor.tree, $('#editor_tree_edit'));
+      //this.em.addNode(this.editor.tree, $('#editor_tree_edit'));
       //alert(JSON.stringify(this.editor.generateTreeConfig(this.editor.tree)));
       //this.chart = new Treant(this.editor.generateTreeConfig(this.editor.tree),function(){alert('x')},$);
 
@@ -122,8 +124,4 @@ class EditorUI {
   updateFileTree(){
 
   }
-
-
-
-
 }

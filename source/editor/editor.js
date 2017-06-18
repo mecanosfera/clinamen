@@ -103,7 +103,8 @@ var teste1 = {
           },
           {
   					type: "condition",
-  					condition: ["==",{target:"self",prop:"hp"},25],
+            name: "teste",
+  					condition: ["!=",{target:"self",prop:"hp"},25],
   					child: {
   						type: "selector",
   						children: [

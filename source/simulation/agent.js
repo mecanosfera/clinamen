@@ -37,10 +37,14 @@ class Agent extends IAgent{
 	}
 
 	distance(agent){
-		return 1;
+		if(agent.position!=null){
+			return Math.sqrt((this.position[0]-agent.position[0])+(this.position[1]-agent.position[1]));
+		}
+		return -1;
 	}
 
-	findAgent(type,filter){
+
+	search(type,filter){
 		if(this.world.has(type)){
 			if(filter instanceof String){
 				if(filter=="nearest"){
@@ -49,6 +53,15 @@ class Agent extends IAgent{
 					for(a in this.world.agents[type]){
 						if(this.distance(a)<dist){
 							nearest = a;
+						}
+					}
+					return nearest;
+				} else if (filter=="farthest"){
+					var dist = 0;
+					var far = null;
+					for(a in this.world.agents[type]){
+						if(this.distance(a)>dist){
+							far = a;
 						}
 					}
 					return nearest;

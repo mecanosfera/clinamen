@@ -69,3 +69,8 @@ nav#top #status{
   border-top: none;
   background-color: #fff;
 }
+
+svg{
+  z-index: -1000;
+  display:none;
+}

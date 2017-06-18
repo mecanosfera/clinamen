@@ -1,0 +1,227 @@
+
+#editor_tree_edit,
+#editor_tree_edit ul,
+#editor_tree_edit li{
+  text-align: center;
+  padding: 0px;
+  margin: 0px;
+}
+
+#editor_tree_edit ul,
+#editor_tree_edit span,
+#editor_tree_edit li{
+  display: inline-block;
+}
+
+#editor_tree_edit h3{
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  font-weight: normal;;
+}
+
+#editor_tree_edit label{
+  vertical-align: bottom;
+  display:block;
+}
+
+#editor_tree_edit ul{
+  display: block;
+  padding: 0px;
+}
+
+#editor_tree_edit li{
+  padding: 0px;
+  list-style: none;
+  /*margin: 20px;*/
+  vertical-align: top;
+  margin-top: 30px;
+}
+
+#editor_tree_edit .node{
+  min-width: 64px;
+  min-height: 48px;
+  padding: 2px;
+}
+
+#editor_tree_edit .icon{
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-position: top center;
+  margin: 0px;
+}
+
+#editor_tree_edit .node_menu{
+  display: inline-block;
+  border-radius: 42px;
+  background-color: #fff;
+  padding: 4px;
+  border: 1px solid #3d3d3d;
+  height: 32px;
+}
+
+#editor_tree_edit .node_menu.selected {
+  height: 32px;
+}
+
+#editor_tree_edit .node_menu.selected.edit_mode{
+  height: auto;
+  border-radius: 20px;
+}
+
+#editor_tree_edit .button{
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-decoration: none;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+  display: none;
+}
+
+#editor_tree_edit .node_menu.selected .button.add,
+#editor_tree_edit .node_menu.selected .button.edit{
+  display: inline-block;
+}
+
+#editor_tree_edit .node_menu.selected .button.confirm,
+#editor_tree_edit .node_menu.selected .button.cancel,
+#editor_tree_edit .node_menu.selected .button.delete{
+  display: none;
+}
+
+#editor_tree_edit .node_menu.selected.edit_mode .button.edit{
+  display: none;
+}
+
+#editor_tree_edit .node_menu.selected.edit_mode .button.confirm,
+#editor_tree_edit .node_menu.selected.edit_mode .button.cancel,
+#editor_tree_edit .node_menu.selected.edit_mode .button.delete{
+  display: inline-block;
+}
+
+#editor_tree_edit .node_menu.selected.edit_mode .edit_area{
+  display: block;
+}
+
+
+#editor_tree_edit .button.add{
+  background-image: url("../img/plus.svg");
+}
+
+#editor_tree_edit .button.edit{
+  background-image: url("../img/pencil.svg");
+}
+
+#editor_tree_edit .button.confirm{
+  background-image: url("../img/confirm.svg");
+}
+
+#editor_tree_edit .button.cancel{
+  background-image: url("../img/error3.svg");
+}
+
+#editor_tree_edit .button.delete{
+  background-image: url("../img/error.svg");
+}
+
+#editor_tree_edit .icon.world{
+  background-image:url("../img/internet.svg");
+}
+
+#editor_tree_edit .icon.agent{
+  background-image:url("../img/user.svg");
+}
+
+#editor_tree_edit .icon.selector{
+  background-image:url("../img/info.svg");
+}
+
+#editor_tree_edit .icon.condition{
+  background-image:url("../img/info2.svg");
+}
+
+#editor_tree_edit select{
+  display: block;
+  border: 1px solid #3d3d3d;
+  background-color: #fff;
+  margin: 2px;
+  margin-top: 5px;
+
+}
+
+#editor_tree_edit .edit_area{
+  position: relative;
+  text-align: left;
+  margin: -4px;
+  margin-top: 4px;
+  border-top: 1px solid #3d3d3d;
+  background-color: #ccc;
+  padding: 5px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: none;
+}
+
+
+
+#editor_tree_edit .name_empty,
+#editor_tree_edit .name_field{
+  position: relative;
+  display: inline-block;
+  /*width: 170px;*/
+  border: 1px solid #3d3d3d;
+  text-align:left;
+  padding: 2px;
+  height: 15px;
+  margin: 0px;
+  margin: 2px;
+  vertical-align: top;
+}
+
+#editor_tree_edit .name_empty{
+  z-index: 0;
+  position: absolute;
+  color: #fff;
+  /*display:inline-block;*/
+  margin-right: 4px;
+}
+
+#editor_tree_edit .name_field{
+  background-color: #fff;
+  z-index: 15;
+}
+
+#editor_tree_edit .condition_value{
+  display: inline-block;
+  width: 150px;
+  border: 1px solid #3d3d3d;
+  text-align:left;
+  padding: 4px;
+  padding-top: 2px;
+  height: 15px;
+  margin: 2px;
+  vertical-align: top;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#editor_tree_edit .condition2_value{
+  display: none;
+}
+
+#editor_tree_edit .section.condition{
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-top: 1px solid #666;
+}
+
+#editor_tree_edit .section.name{
+  border: none;
+}
+
+#editor_tree_edit .section.condition2{
+  padding-bottom: 0px;
+}

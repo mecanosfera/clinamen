@@ -60,6 +60,7 @@ class EntityMenu {
       element: this.el,
       entity: null
     };
+    this.paper = Raphael(0,0,2000,2000);
   }
 
   add(entity,parent){
@@ -114,163 +115,270 @@ class EntityMenu {
 
   }
 
-
-  addNode(node,parent){
-    var prnt = parent;
-    var li = $('<li class="node '+node.type+'"></li>');
-    var view = $('<div class="item_node_view"></div>');
-    var edit = $('<div class="item_node_edit"></div>');
-    var name = node.name+":"+node.type;
-
-    //var icon = $('<span class="icon_node '+node.type+'"></span>');
-    var entView = $('<a href="#" class="item_node">'+node.name+":"+node.type+'</a>');
-    var entEdit = $('<input type="text" class="item_node_name edit" value="'+node.name+'"> : <a href="#" class="item_node_type edit">'+node.type+'</a>');
-    var btEdit = $('<a href="#" class="item_node_btedit"></a>');
-    var btDelete = $('<a href="#" class="item_node_delete"></a>');
-    var btConfirm = $('<a href="#" class="item_node_confirm edit"></a>');
-    var btCancel = $('<a href="#" class="item_node_cancel edit"></a>');
-    var extraInfo = $('<div class="item_node_info view"></div>');
-    var extraEdit = $('<div class="item_node_options edit"></div>');
-    var btAdd = $('<a href="#" class="item_node_add">+</a>');
-    var ul = $('<ul class="item_node_children '+node.type+'"></ul>');
-
-    view.append(entView);
-    view.append(btEdit);
-    view.append(extraInfo);
-
-    edit.append(entEdit);
-    edit.append(btConfirm);
-    edit.append(btCancel);
-    edit.append(extraEdit);
-
-    li.append(view);
-    li.append(edit);
-
-    if(node instanceof Action){
-      //definições de ação
-    } else if (node instanceof Condition) {
-      //view
-      var op = $('<span class="item_node_view_operator item_condition view"></span>');
-      var condition1 = $('<ul class="item_node_view_condition item_condition view"></ul>');
-      var condition2 = $('<ul class="item_node_view_condition item_condition view"></ul>');;
-      if(node.condition!=null){
-        op.text(node.condition[0]);
-        if(node.condition[1] instanceof Object){
-          //for(let p of node.condition[1]){
-          //  condition1.append('<li>'+p+': '+node.condition[1][p]+'</li>');
-          //}
-        } else {
-          condition1.append('<li>'+node.condition[1]+'</li>');
-        }
-        if(node.condition[2] instanceof Object){
-          //for(let p of node.condition[2]){
-          //  condition2.append('<li>'+p+': '+node.condition[2][p]+'</li>');
-          //}
-        } else {
-          condition2.append('<li>'+node.condition[2]+'</li>');
-        }
-      }
-      extraInfo.append(op);
-      extraInfo.append(condition1);
-      extraInfo.append(condition2);
-
-      //edit
-      var opSel = $('<select class="item_node_edit_operation edit"></select>');
-      var operators = ['==','===','!=','!==','>','<','>=','<='];
-      var cond1 = $('<ul class="item_node_edit_condition item_condition edit"></ul>');
-      var cond2 = $('<ul class="item_node_edit_condition item_condition edit"></ul>');
-      for(let o in operators){
-        var opIt = $('<option value="'+o+'">'+o+'</option>');
-        if(node.condition!=null && node.condition[0]==o){
-          opIt.attr("selected");
-        }
-        opSel.append(opIt);
-      }
-
-      extraEdit.append(opSel);
-      extraEdit.append(cond1);
-      extraEdit.append(cond2);
-
-      //continuar, condições
-
-      this.addNode(node.child,ul);
-      li.append(btAdd);
-    } else if (node instanceof Decorator){
-      li.append(btAdd);
-      this.addNode(node.child,ul);
-    } else {
-      li.append(btAdd);
-      for(let c of node.children){
-        this.addNode(c,ul);
-      }
-    }
-
-    /*icon.click(function(){
-      ul.toggle();
-    });
-    ent.click(this,function(evt){
-      evt.data.select([node,li]);
-    });
-    ent.dblclick(this,function(evt){
-      evt.data.editorUI.editor.edit(node,"tree");
-      evt.data.editorUI.edit("tree");
-    });*/
-
-    li.append(ul);
-    prnt.append(li);
-  }
-
-
 }
 
-/*class BehaviorTreeUI {
 
-  constructor(args){
-    this.init(args);
+class NodeUI {
+
+  constructor(node,parent,line){
+    this.init(node,parent,line);
   }
 
-  init(args){
-    this.editor = args.editor;
-    this.node = args.node;
-    this.el = args.element;
+  init(node,parent,line=null){
+    this.node = node;
+    this.prnt = parent;
+    this.li = $('<li class="node '+node.type+'"></li>');
+    this.nav = $('<nav class="node_menu '+node.type+'"></nav>');
+    this.h3 = $('<h3 class="icon '+node.type+'"></h3>');
+    this.btEdit = $('<a href="#" class="button edit"></a>');
+    this.btConfirm = $('<a href="#" class="button confirm"></a>');
+    this.btCancel = $('<a href="#" class="button cancel"></a>');
+    this.btDelete = $('<a href="#" class="button delete"></a>');
+    this.btAdd = $('<a href="#" class="button add"></a>');
+    this.label = $('<label>'+node.type+'</label>');
+    this.ul = $('<ul></ul>');
+    this.editArea = $('<div class="edit_area"></div>');
+    this.sectionName = $('<section class="section name '+node.type+'"></section>');
+    this.nameSpan =  $('<span class="name_empty">Nome</span>');
+    this.nameInput = $('<input type="text" class="name_field" value="" />');
+    this.nav.append(this.h3);
+    this.nav.append(this.btEdit);
+    this.nav.append(this.btConfirm);
+    this.nav.append(this.btCancel);
+    this.nav.append(this.btDelete);
+    this.nav.append(this.btAdd);
+    this.nav.append(this.editArea);
+    this.sectionName.append(this.nameSpan);
+    this.sectionName.append(this.nameInput);
+    this.editArea.append(this.sectionName);
+    this.li.append(this.nav);
+    this.li.append(this.label);
+    this.li.append(this.ul);
+    this.prnt.append(this.li);
+    this.children = [];
+    this.line = line;
+    //alert('aaaaa');
+
+    var nav = this.nav;
+
+    this.h3.click(function(){
+      if(nav.hasClass("selected") && !nav.hasClass("edit_mode")){
+        nav.removeClass("selected");
+      } else {
+        nav.addClass("selected");
+      }
+    });
+
+    this.btEdit.click(function(){
+      if(nav.hasClass("edit_mode")){
+        nav.removeClass("edit_mode");
+      } else {
+        nav.addClass("edit_mode");
+      }
+    });
+
+    this.btConfirm.click(function(){
+
+    });
+
+    this.btCancel.click(function(){
+
+    });
+
+    if(node instanceof Decorator){
+      if(node instanceof Condition){
+        this.sectionCondition1 = $('<section class="section condition1"></section>');
+        this.selectConditionEntity1 = $('<select></select>');
+        this.selectConditionVar1 = $('<select></select>');
+        this.selectConditionMod1 = $('<select></select>');
+        this.sectionCondition1.append(this.selectConditionEntity1);
+        this.sectionCondition1.append(this.selectConditionVar1);
+        this.sectionCondition1.append(this.selectConditionMod1);
+        this.sectionConditionOperator = $('<section class="section operator"></section>');
+        this.selectConditionOperator = $('<select></select>');
+        for(let op in lop){
+          this.selectConditionOperator.append($('<option value='+op+'>'+op+'</option>'));
+          //alert(this.selectConditionOperator.html());
+        }
+        this.sectionConditionOperator.append(this.selectConditionOperator);
+        this.sectionCondition2 = $('<section class="section condition2"></section>');
+        this.selectConditionValueType = $('<select><option value="entidade">entidade</option><option value="valor">valor</option></select>');
+        this.sectionCondition2.append(this.selectConditionValueType);
+        this.divConditionEntity2 = $('<div class="condition2 entity"></div>');
+        this.selectConditionEntity2 = $('<select></select>');
+        this.selectConditionVar2 = $('<select></select>');
+        this.selectConditionMod2 = $('<select></select>');
+        this.divConditionEntity2.append(this.selectConditionEntity2);
+        this.divConditionEntity2.append(this.selectConditionVar2);
+        this.divConditionEntity2.append(this.selectConditionMod2);
+        this.divConditionValue2 = $('<div class="condition2 value"></div>');
+        this.inputConditionValue2 = $('<input type="text" value="" />');
+        this.divConditionValue2.append(this.inputConditionValue2);
+        this.sectionCondition2.append(this.divConditionEntity2);
+        this.sectionCondition2.append(this.divConditionValue2);
+        this.editArea.append(this.sectionCondition1);
+        this.editArea.append(this.sectionConditionOperator);
+        this.editArea.append(this.sectionCondition2);
+
+        if(this.node.child!=null){
+          this.children.push(new NodeUI(this.node.child, this.ul, null));
+        }
+        //draw line
+      }
+    } else if (node instanceof Action){
+
+    } else {
+        if(this.node.children.length>0){
+          for(let c of this.node.children){
+            var nd = new NodeUI(c, this.ul, null);
+            //paper.path('M'+(nav.offsetLeft)+','+nav.offsetTop+' L'+(chnav.offsetLeft)+','+chnav.offsetTop);
+            //nd.line =
+            //draw line
+          }
+        }
+    }
+
+    this.update();
   }
 
-  constructTree(node,el){
-    var prnt = this.el;
-    if(el!=null){
-      prnt = el;
+
+
+  update(){
+    if(this.node.name!=null && this.node.name!=""){
+      this.nameInput.val(this.node.name);
+      this.label.text(this.node.name);
+    } else {
+      this.label.text(this.node.type);
     }
-    var ul = $('<ul></ul>');
-    var main = $('<li></li>');
-    var title = $('<h4>'+node.name+':'+node.type+'</h4>');
-    var info = $('<div class="node_info"></div>');
-    var width = 0;
-    if(node.UUID!=null){
-      info.append('<label>UUID:</label><span>'+node.UUID+'</span>');
+
+
+    if(this.node instanceof Decorator){
+      if(this.node instanceof Condition){
+        if(this.node.condition!=null){
+          this.selectConditionOperator.find('option[VALUE="'+this.node.condition[0]+'"]').prop('selected',true);
+          var a = this.node.condition[1];
+          var b = this.node.condition[2];
+
+          if(b instanceof Object){
+
+          } else {
+            this.inputConditionValue2.val(b);
+            this.selectConditionValueType.find('option[VALUE="valor"]').prop('selected',true);
+            this.divConditionValue2.show();
+            this.divConditionEntity2.hide();
+            this.selectConditionEntity2 = $('<select></select>');
+            this.selectConditionVar2 = $('<select></select>');
+            this.selectConditionMod2 = $('<select></select>');
+          }
+
+          /*
+
+
+          var entity = this.node;
+          if(this.selectConditionEntity1.val()=="world"){
+            entity = this.node.world;
+          } else {
+            entity = this.node.world.get(this.selectConditionEntity1.val(),this.selectCondition);
+            //entity = this.node.world.agent
+          }
+          //mods: nearest, fartest, first, last, n,ne,e,se,s,sw,w,nw
+
+          this.selectConditionVar1 = $('<select></select>');*/
+        } else {
+
+        }
+      }
+    } else if (this.node instanceof Action){
+
     }
+  }
+
+  draw(){
+    if(this.line!=null){
+
+    }
+  }
+
+  resetFields(){
+
+  }
+}
+
+
+
+function generateBehaviorTree(node,parent){
+  var prnt = parent;
+  var li = $('<li class="node '+node.type+'"></li>');
+  var nav = $('<nav class="node_menu '+node.type+'"></nav>');
+  var h3 = $('<h3 class="icon '+node.type+'"></h3>');
+  var btEdit = $('<a href="#" class="button edit"></a>');
+  var btConfirm = $('<a href="#" class="button confirm"></a>');
+  var btCancel = $('<a href="#" class="button cancel"></a>');
+  var btDelete = $('<a href="#" class="button delete"></a>');
+  var btAdd = $('<a href="#" class="button add"></a>');
+  var label = $('<label>'+node.type+'</label>');
+  var ul = $('<ul></ul>');
+  var editArea = $('<div class="edit_area"></div>');
+  var sectionName = $('<section class="section name '+node.type+'"></section>');
+  var name = "";
+  if(node.name!=null){
+    name = node.name;
+  }
+  var nameSpan =  $('<span class="name_empty">Nome</span>');
+  var nameInput = $('<input type="text" class="name_field" value="'+name+'" />');
+  nav.append(h3);
+  nav.append(btEdit);
+  nav.append(btConfirm);
+  nav.append(btCancel);
+  nav.append(btDelete);
+  nav.append(btAdd);
+  nav.append(editArea);
+  sectionName.append(nameSpan);
+  sectionName.append(nameInput);
+  editArea.append(sectionName);
+  li.append(nav);
+  li.append(label);
+  li.append(ul);
+  prnt.append(li);
+  //alert('aaaaa');
+
+  h3.click(function(){
+    if(nav.hasClass("selected") && !nav.hasClass("edit_mode")){
+      nav.removeClass("selected");
+    } else {
+      nav.addClass("selected");
+    }
+  });
+
+btEdit.click(function(){
+  if(nav.hasClass("edit_mode")){
+    nav.removeClass("edit_mode");
+  } else {
+    nav.addClass("edit_mode");
+  }
+});
+
+btCancel.click(function(){
+
+});
+
+
+  if(node instanceof Decorator){
     if(node instanceof Condition){
-      //
-    }
-    main.append(title);
-    main.append(info);
-    ul.append(main);
-
-    if(node instanceof Action){
-      ul.width(50);
-    } else if (node instanceof Decorator){
-      var child = $('<li><h4>child:</h4></li>');
       if(node.child!=null){
-        this.constructTree(node.child,child);
-        ul.append(child);
+        generateBehaviorTree(node.child,ul);
       }
-    } else if (node instanceof Node){
-      var children = $('<li><h4>children:</h4></li>');
-      for(let c of node.children){
-        this.constructTree(c,children);
-      }
-      ul.append(children);
     }
+  } else if (node instanceof Action){
 
-    prnt.append(ul);
+  } else {
+      if(node.children.length>0){
+        for(let c of node.children){
+          //draw line
+          generateBehaviorTree(c,ul);
+        }
+      }
   }
-}*/
+
+  return li;
+}

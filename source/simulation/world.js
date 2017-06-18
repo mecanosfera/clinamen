@@ -8,6 +8,7 @@ class World extends Entity{
       this.size = [0,0];
       this.agents = [];
       this.agentsType = {};
+      this.templates = {};
       this.positions = [];
       this.generations = [];
 
@@ -36,9 +37,6 @@ class World extends Entity{
           this.add(a);
         }
       }
-
-
-
   }
 
   has(type){
@@ -60,21 +58,46 @@ class World extends Entity{
     this.agents.push(ag);
     this.agentsType[ag.type].push(ag);
     if(ag.position[0]>-1){
-      //alert(ag.position);
       this.positions[ag.position[0]][ag.position[1]] = ag;
     }
-    //alert(typeof this.positions[11][15]);
+    this.addTemplate(agent);
+
   }
+
+  add(agent){
+    
+  }
+
+  addTemplate(agent){
+    if(this.templates[agent.type]==null){
+      this.templates[agent.type] = agent;
+    }
+  }
+
+  generateAgent(type,position){
+    if(this.templates[type]!=null){
+      var ag = new Agent(this.templates[type].toJson());
+      if(!this.agentsType[ag.type]){"op"
+        this.agentsType[ag.type] = [];
+      }
+      if(position!=null){
+        ag.position = position;
+        this.positions[ag.position[0]][ag.position[1]] = ag;
+      }
+    }
+  }
+
+  start(){
+
+  }
+
+
 
   remove(){
 
   }
 
   run(){
-
-  }
-
-  saveGeneration(){
 
   }
 

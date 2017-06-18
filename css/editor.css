@@ -79,59 +79,7 @@
   background-image: url('../img/empty_cell_white.png');
 }
 
-#editor_tree_edit a{
-  text-decoration: none;
-}
 
-#editor_tree_edit li, #editor_tree_edit div{
-  display: inline-block;
-}
-
-#editor_tree_edit, #editor_tree_edit ul{
-  padding: 0px;
-  text-align: center;
-}
-
-
-
-#editor_tree_edit li{
-  list-style: none;
-  padding: 2px;
-  border: 1px solid #999;
-  margin: 3px;
-  border-radius: 3px;
-}
-
-#editor_tree_edit .edit{
-  display: none;
-}
-
-#editor_tree_edit .node.selector{
-  background-color: #ccc;
-}
-
-#editor_tree_edit .node.condition{
-  background-color: #666;
-}
-
-#editor_tree_edit .node.action{
-  background-color: #fff;
-}
-
-#editor_tree_edit .node.condition div.view{
-  display: block;
-}
-
-#editor_tree_edit .item_node_view_operator{
-  border-radius: 15px;
-  font-weight: bold;
-  padding: 3px;
-  font-size: 12px;
-  text-align: center;
-  color: #333;
-  border: 1px solid #333;
-  background-color: #ccc;
-}
 
 
 #library{
@@ -176,9 +124,7 @@
 }
 
 
-#editor_tree_edit{
 
-}
 
 #library ul{
   padding: 0px;
