@@ -136,11 +136,11 @@ class EntityMenu {
 
 class NodeUI {
 
-  constructor(node,parent,line){
-    this.init(node,parent,line);
+  constructor(node,parent,world,line){
+    this.init(node,parent,world,line);
   }
 
-  init(node,parent,line=null){
+  init(node,parent,world,line=null){
     this.node = node;
     this.prnt = parent;
     this.li = $('<li class="node '+node.type+'"></li>');
@@ -173,6 +173,7 @@ class NodeUI {
     this.prnt.append(this.li);
     this.children = [];
     this.line = line;
+    this.world = world;
     //alert('aaaaa');
 
     var nav = this.nav;
@@ -204,9 +205,26 @@ class NodeUI {
     if(node instanceof Decorator){
       if(node instanceof Condition){
         this.sectionCondition1 = $('<section class="section condition1"></section>');
-        this.selectConditionEntity1 = $('<select></select>');
+        this.selectConditionEntity1 = $('<select><option value="world">mundo</option><option value="self">self</option></select>');
         this.selectConditionVar1 = $('<select></select>');
         this.selectConditionMod1 = $('<select></select>');
+        for(let tp in this.world.templates){
+            this.selectConditionEntity1.append('<option value="'+tp+'">'+tp+'</option>');
+        }
+        this.selectConditionEntity1.change(this,function(e){
+          var v = $(this).val();
+          var ent = e.data.world;
+          if (v=="self"){
+            ent = e.data.node.agent;
+          } else if (v!="world") {
+            ent = e.data.world.templates[v].agent;
+          }
+          e.data.selectConditionVar1.html('');
+          for(let p in ent.prop){
+            e.data.selectConditionVar1.append('<option val="'+p+'">'+p+'</option>');
+          }
+        });
+
         this.sectionCondition1.append(this.selectConditionEntity1);
         this.sectionCondition1.append(this.selectConditionVar1);
         this.sectionCondition1.append(this.selectConditionMod1);
@@ -236,8 +254,11 @@ class NodeUI {
         this.editArea.append(this.sectionConditionOperator);
         this.editArea.append(this.sectionCondition2);
 
+
+
+
         if(this.node.child!=null){
-          this.children.push(new NodeUI(this.node.child, this.ul, null));
+          this.children.push(new NodeUI(this.node.child, this.ul, this.world, null));
         }
         //draw line
       }
@@ -246,7 +267,7 @@ class NodeUI {
     } else {
         if(this.node.children.length>0){
           for(let c of this.node.children){
-            var nd = new NodeUI(c, this.ul, null);
+            var nd = new NodeUI(c, this.ul, this.world, null);
             //paper.path('M'+(nav.offsetLeft)+','+nav.offsetTop+' L'+(chnav.offsetLeft)+','+chnav.offsetTop);
             //nd.line =
             //draw line
@@ -256,6 +277,8 @@ class NodeUI {
 
     this.update();
   }
+
+
 
 
 
@@ -275,9 +298,15 @@ class NodeUI {
           var a = this.node.condition[1];
           var b = this.node.condition[2];
 
+          if(a instanceof Object){
+            if(a.type=="self"){
+              //for()
+            }
+          }
+
           if(b instanceof Object){
 
-          } else {
+          } else if (b!=null) {
             this.inputConditionValue2.val(b);
             this.selectConditionValueType.find('option[VALUE="valor"]').prop('selected',true);
             this.divConditionValue2.show();

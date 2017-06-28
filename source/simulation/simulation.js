@@ -5,6 +5,8 @@ class Simulation {
   }
 
   init(args){
+    this.ui = new SimulationUI(this);
+    this.worlds = this.load();
 
   }
 }

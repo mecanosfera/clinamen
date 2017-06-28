@@ -109,6 +109,8 @@ class World extends Entity{
 
   }
 
-
+  get(position){  
+      return this.positions[position[0]][position[1]]
+  }
 
 }

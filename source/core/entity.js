@@ -23,5 +23,7 @@ class Entity {
     }
   }
 
+  update(){}
+
   toJson(){}
 }

@@ -1,0 +1,57 @@
+{
+	"type": "world",
+	"name": "world1",
+	"size": [20,20],
+	"generation": 0,
+  "agents":[
+    {
+      "template": "adandante",
+      "name": "andante1",
+      "position": [10,15]
+    },
+    {
+      "template": "waiter",
+      "name": "waiter",
+			"position": [19,19]
+    }
+  ],
+	"templates": [
+		{
+      "type":"agent",
+      "template": "andante",
+			"tree": {
+				"type": "selector",
+				"children": [
+          {
+            "name": "aproximação",
+  					"type": "condition",
+  					"condition": [">=",{"agent" : {"template": "waiter", "mod":"nearest"},"cap":"distance"},2],
+  					"child": {
+  								"type": "action",
+  								"act": "move",
+  								"target": "waiter",
+  								"mod": "nearest"
+					    }
+          },
+          {
+              "type": "action",
+              "act": "move",
+              "target": [0,0]
+          },
+          {
+            "type": "action",
+            "act": "wait"
+          }
+				]
+			}
+		},
+    {
+      "type":"agent",
+      "template": "waiter",
+			"tree": {
+        "type": "action",
+        "act": "wait"
+      }
+    }
+	]
+}
