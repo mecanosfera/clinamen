@@ -12,6 +12,11 @@ class World extends Entity{
       this.positions = [];
       this.generations = [];
       this.started = false;
+      this.cap = {
+        numAgents:{
+          total:
+        }
+      }
       this.prop = {
         numAgents : {
           total: 0
@@ -65,12 +70,19 @@ class World extends Entity{
     }
     if(this.templates[ag.template]==null){
       this.templates[ag.template] = {
-        agent:ag,
-        positions: []
+        agent:ag
       };
       //alert(this.templates[ag.template].agent.template);
     }
     if(position!=null){
+      var name = ag.name;
+      if(name==null || name==""){
+        
+      }
+      this.agents.push({
+        template:ag.template,
+        name: ag.name
+      });
       this.templates[ag.template].positions.push(position);
       this.prop.numAgents.total += 1;
       if(this.prop.numAgents[ag.template]==null){
@@ -109,7 +121,7 @@ class World extends Entity{
 
   }
 
-  get(position){  
+  get(position){
       return this.positions[position[0]][position[1]]
   }
 

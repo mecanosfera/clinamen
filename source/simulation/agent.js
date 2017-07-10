@@ -10,8 +10,9 @@ class Agent extends IAgent{
 		this.color = "#000000";
 		this.sprite;
 		this.nextPosition = null;
+		this.lastPosition = null;
 		this.cap = {
-			"distance" : this.distance
+			//"distance" : this.distance
 		}
 
 		if(args.world!=null){

@@ -205,57 +205,36 @@ class NodeUI {
     if(node instanceof Decorator){
       if(node instanceof Condition){
         this.sectionCondition1 = $('<section class="section condition1"></section>');
-        this.selectConditionEntity1 = $('<select><option value="world">mundo</option><option value="self">self</option></select>');
-        this.selectConditionVar1 = $('<select></select>');
-        this.selectConditionMod1 = $('<select></select>');
-        for(let tp in this.world.templates){
-            this.selectConditionEntity1.append('<option value="'+tp+'">'+tp+'</option>');
+        this.inputConditionValue1 = $('<input type="text" value="" />');
+        if(this.node.condition!=null && this.node.condition[1]!=null){
+          if(this.node.condition[1] instanceof Object){
+            this.inputConditionValue1.val(this.node.condition[1].stringify());
+          } else {
+            this.inputConditionValue1.val(this.node.condition[1]);
+          }
         }
-        this.selectConditionEntity1.change(this,function(e){
-          var v = $(this).val();
-          var ent = e.data.world;
-          if (v=="self"){
-            ent = e.data.node.agent;
-          } else if (v!="world") {
-            ent = e.data.world.templates[v].agent;
-          }
-          e.data.selectConditionVar1.html('');
-          for(let p in ent.prop){
-            e.data.selectConditionVar1.append('<option val="'+p+'">'+p+'</option>');
-          }
-        });
+        this.sectionCondition1.append(this.inputConditionValue1);
 
-        this.sectionCondition1.append(this.selectConditionEntity1);
-        this.sectionCondition1.append(this.selectConditionVar1);
-        this.sectionCondition1.append(this.selectConditionMod1);
         this.sectionConditionOperator = $('<section class="section operator"></section>');
         this.selectConditionOperator = $('<select></select>');
-        for(let op in lop){
-          this.selectConditionOperator.append($('<option value='+op+'>'+op+'</option>'));
-          //alert(this.selectConditionOperator.html());
-        }
+        if(this.node.condition!=null && this.node.condition[2]!=null){
+
         this.sectionConditionOperator.append(this.selectConditionOperator);
+
         this.sectionCondition2 = $('<section class="section condition2"></section>');
-        this.selectConditionValueType = $('<select><option value="entidade">entidade</option><option value="valor">valor</option></select>');
-        this.sectionCondition2.append(this.selectConditionValueType);
-        this.divConditionEntity2 = $('<div class="condition2 entity"></div>');
-        this.selectConditionEntity2 = $('<select></select>');
-        this.selectConditionVar2 = $('<select></select>');
-        this.selectConditionMod2 = $('<select></select>');
-        this.divConditionEntity2.append(this.selectConditionEntity2);
-        this.divConditionEntity2.append(this.selectConditionVar2);
-        this.divConditionEntity2.append(this.selectConditionMod2);
-        this.divConditionValue2 = $('<div class="condition2 value"></div>');
         this.inputConditionValue2 = $('<input type="text" value="" />');
-        this.divConditionValue2.append(this.inputConditionValue2);
-        this.sectionCondition2.append(this.divConditionEntity2);
-        this.sectionCondition2.append(this.divConditionValue2);
+        if(this.node.condition!=null && this.node.condition[2]!=null){
+          if(this.node.condition[2] instanceof Object){
+            this.inputConditionValue1.val(this.node.condition[2].stringify());
+          } else {
+            this.inputConditionValue1.val(this.node.condition[2]);
+          }
+        }
+        this.sectionCondition2.append(this.inputConditionValue2);
+
         this.editArea.append(this.sectionCondition1);
         this.editArea.append(this.sectionConditionOperator);
         this.editArea.append(this.sectionCondition2);
-
-
-
 
         if(this.node.child!=null){
           this.children.push(new NodeUI(this.node.child, this.ul, this.world, null));
