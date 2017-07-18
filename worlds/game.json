@@ -1,0 +1,38 @@
+"worlds":[
+  {
+    "type":"world",
+    "name":"game of life",
+    "size": [40,40],
+    "generation": 0,
+    "agents":[],
+    "templates":[
+      {
+        "type":"agent",
+        "name":"celula",
+        "props":{
+          "estado": 0
+        },
+        "color":"#ffffff",
+        "sprite":null,
+        "behavior":{
+          "type":"selector",
+          "children":[
+            {
+                "type":"action",
+                "name":"sobreviver",
+                "target":"self",
+                "condition":[
+                    ["total|world:radius==1|agent:celula:prop","==",1],
+                    "and",
+                    ["world:|number|agent:"]
+                ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+
+
+
+  ];

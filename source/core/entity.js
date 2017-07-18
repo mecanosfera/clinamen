@@ -8,7 +8,7 @@ class Entity {
     this.UUID;
     this.name = "";
     this.type="entity";
-    this.prop = {};
+    this.state = {};
 
     if(args!=null){
       if(args.UUID!=null){
@@ -17,8 +17,8 @@ class Entity {
       if(args.name!=null){
   			this.name = args.name;
   		}
-      if(args.prop!=null){
-        this.prop = args.prop;
+      if(args.state!=null){
+        this.state = args.state;
       }
     }
   }

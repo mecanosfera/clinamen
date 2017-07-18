@@ -4,9 +4,12 @@ class Grid {
     this.ui = ui;
     this.zoom = ui.zoom;
 		this.canvas = document.getElementById(grid);
-    this.size = {X:size[0],Y:size[1]};
-		this.canvas.width = this.size.X*20;
-		this.canvas.height = this.size.Y*20;
+    this.size = null;
+    if(size!=null){
+      this.size = {X:size[0],Y:size[1]}
+      this.canvas.width = this.size.X*20;
+  		this.canvas.height = this.size.Y*20;
+    }
 		this.cxt = this.canvas.getContext('2d');
 		this.tamanhoCelula = 20;
 		this.updating = false;
@@ -24,6 +27,12 @@ class Grid {
         evt.data.ui.edit("empty_cell");
       }
     });
+  }
+
+  setSize(size){
+    this.size = {X:size[0],Y:size[1]}
+    this.canvas.width = this.size.X*20;
+		this.canvas.height = this.size.Y*20;
   }
 
   draw(world){
@@ -254,67 +263,18 @@ class NodeUI {
         }
     }
 
-    this.update();
+    //this.update();
   }
 
 
 
 
+}
+
+
 
   update(){
-    if(this.node.name!=null && this.node.name!=""){
-      this.nameInput.val(this.node.name);
-      this.label.text(this.node.name);
-    } else {
-      this.label.text(this.node.type);
-    }
 
-
-    if(this.node instanceof Decorator){
-      if(this.node instanceof Condition){
-        if(this.node.condition!=null){
-          this.selectConditionOperator.find('option[VALUE="'+this.node.condition[0]+'"]').prop('selected',true);
-          var a = this.node.condition[1];
-          var b = this.node.condition[2];
-
-          if(a instanceof Object){
-            if(a.type=="self"){
-              //for()
-            }
-          }
-
-          if(b instanceof Object){
-
-          } else if (b!=null) {
-            this.inputConditionValue2.val(b);
-            this.selectConditionValueType.find('option[VALUE="valor"]').prop('selected',true);
-            this.divConditionValue2.show();
-            this.divConditionEntity2.hide();
-            this.selectConditionEntity2 = $('<select></select>');
-            this.selectConditionVar2 = $('<select></select>');
-            this.selectConditionMod2 = $('<select></select>');
-          }
-
-          /*
-
-
-          var entity = this.node;
-          if(this.selectConditionEntity1.val()=="world"){
-            entity = this.node.world;
-          } else {
-            entity = this.node.world.get(this.selectConditionEntity1.val(),this.selectCondition);
-            //entity = this.node.world.agent
-          }
-          //mods: nearest, fartest, first, last, n,ne,e,se,s,sw,w,nw
-
-          this.selectConditionVar1 = $('<select></select>');*/
-        } else {
-
-        }
-      }
-    } else if (this.node instanceof Action){
-
-    }
   }
 
   draw(){
@@ -325,9 +285,9 @@ class NodeUI {
 
   resetFields(){
 
-  }
 }
 
+}
 
 
 function generateBehaviorTree(node,parent){

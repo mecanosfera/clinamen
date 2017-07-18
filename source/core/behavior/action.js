@@ -28,7 +28,10 @@ class Action extends Node{
 
 	run(){
 		//alert(this.act);
-		return this.agent.act(this.act,this.target,this.condition);
+		if(this.testCondition()){
+			return this.agent.act(this.act,this.target,this.condition);
+		}
+		return false; 
 	}
 
 }

@@ -5,6 +5,7 @@ class Node extends Entity{
 		this.type="node";
 		this.agent = null;
 		this.children = [];
+		this.condition = null;
 
 		if(node.agent!=null){
 			this.agent = node.agent;
@@ -39,6 +40,13 @@ class Node extends Entity{
 		}
 		c.setAgent(this.agent);
 		this.children.push(c);
+	}
+
+	testCondition(){
+		if(condition!=null){
+			return true;
+		}
+		return true;
 	}
 
 	run(){
@@ -83,9 +91,11 @@ class Selector extends Node{
 	}
 
 	run(){
-		for(let c of this.children){
-			if(c.run()){
-				return true;
+		if(this.testCondition()){
+			for(let c of this.children){
+				if(c.run()){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -102,10 +112,14 @@ class Sequence extends Node{
 	}
 
 	run(){
-		for(let c of this.children){
-			if(!c.run()){
-				return false;
+		if(this.testCondition()){
+			for(let c of this.children){
+				if(!c.run()){
+					return false;
+				}
 			}
+		} else {
+			return false;
 		}
 		return true;
 	}
@@ -121,10 +135,12 @@ class RandomSelector extends Node {
 	}
 
 	run(){
-		var rchildren = shuffle(this.children);
-		for(let c of rchildren){
-			if(c.run()){
-				return true;
+		if(this.testCondition()){
+			var rchildren = shuffle(this.children);
+			for(let c of rchildren){
+				if(c.run()){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -140,11 +156,15 @@ class RandomSequence extends Node {
 	}
 
 	run(){
-		var rchildren = shuffle(this.children);
-		for(let c of rchildren){
-			if(!c.run()){
-				return false;
+		if(this.testCondition()){
+			var rchildren = shuffle(this.children);
+			for(let c of rchildren){
+				if(!c.run()){
+					return false;
+				}
 			}
+		} else {
+			return false;
 		}
 		return true;
 	}

@@ -5,12 +5,13 @@ class Agent extends IAgent{
 		this.type="agent";
 		this.template;
 		this.world;
-		this.tree;
+		this.behavior;
 		this.position = [-1,-1];
 		this.color = "#000000";
 		this.sprite;
 		this.nextPosition = null;
 		this.lastPosition = null;
+		this.nextState = null;
 		this.cap = {
 			//"distance" : this.distance
 		}
@@ -24,8 +25,8 @@ class Agent extends IAgent{
 		if(args.color!=null){
 			this.color = args.color;
 		}
-		if(args.tree!=null){
-			this.add(args.tree);
+		if(args.behavior!=null){
+			this.add(args.behavior);
 		}
 		if(args.template!=null){
 			this.template = args.template;
@@ -38,13 +39,13 @@ class Agent extends IAgent{
 
 	}
 
-	add(tree){
-		if(tree instanceof Node){
-			this.tree = tree;
+	add(behavior){
+		if(behavior instanceof Node){
+			this.behavior = behavior;
 		} else {
-			this.tree = NodeConstructor(tree);
+			this.behavior = NodeConstructor(behavior);
 		}
-		this.tree.setAgent(this);
+		this.behavior.setAgent(this);
 	}
 
 	distance(target,origin=null){
@@ -119,7 +120,7 @@ class Agent extends IAgent{
 			}
 		} else if (target instanceof String){
 
-		} else if (target Number.isInteger(target)){
+		} else if (Number.isInteger(target)){
 			viz = [viz[target]];
 		}
 		var dist = 9999;

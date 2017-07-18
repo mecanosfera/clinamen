@@ -2,14 +2,14 @@ const FAILURE = -1;
 const RUNNING = 0;
 const SUCCESS = 1;
 
-const NORTH, NORTE, TOP, UP = 0;
+/*const NORTH, NORTE, TOP, UP = 0;
 const NORTHEAST, NORDESTE, TOPRIGHT = 1;
 const EAST, LESTE, RIGHT = 2;
 const SOUTHEAST, SUDESTE, BOTTOMRIGHT = 3;
 const SOUTH, SUL, BOTTOM, DOWN = 4;
 const SOUTHWEST, SUDOESTE, BOTTOMLEFT = 5;
 const WEST, OESTE, LEFT = 6;
-const NORTHWEST, NOROESTE, TOPLEFT = 7;
+const NORTHWEST, NOROESTE, TOPLEFT = 7;*/
 
 function UUIDGenerator(){
 	return 0;

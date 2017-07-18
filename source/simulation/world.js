@@ -14,10 +14,10 @@ class World extends Entity{
       this.started = false;
       this.cap = {
         numAgents:{
-          total:
+          total:0
         }
       }
-      this.prop = {
+      this.state = {
         numAgents : {
           total: 0
         }
@@ -77,20 +77,30 @@ class World extends Entity{
     if(position!=null){
       var name = ag.name;
       if(name==null || name==""){
-        
+
       }
       this.agents.push({
         template:ag.template,
         name: ag.name
       });
-      this.templates[ag.template].positions.push(position);
-      this.prop.numAgents.total += 1;
-      if(this.prop.numAgents[ag.template]==null){
-        this.prop.numAgents[ag.template] = 0;
+      //this.templates[ag.template].positions.push(position);
+      this.state.numAgents.total += 1;
+      if(this.state.numAgents[ag.template]==null){
+        this.state.numAgents[ag.template] = 0;
       }
-      this.prop.numAgents[ag.template] += 1;
+      this.state.numAgents[ag.template] += 1;
     }
   }
+
+
+  start(){
+    for(tp of this.templates){
+      
+    }
+
+
+  }
+
 
 
   start(){
