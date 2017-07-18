@@ -4,8 +4,8 @@ class Node extends Entity{
 		super.init(node);
 		this.type="node";
 		this.agent = null;
-		this.children = [];
 		this.condition = null;
+		this.children = [];
 
 		if(node.agent!=null){
 			this.agent = node.agent;
@@ -42,9 +42,69 @@ class Node extends Entity{
 		this.children.push(c);
 	}
 
-	testCondition(){
+
+	getAgent(def){
+		if(def.target!=null){
+			if(def.target=="self"){
+				return this.agent;
+			}
+		} else {
+			var ags = [];
+			if(def.template!=null){
+				ags = this.agent.world.getAgent(def.template);
+			}
+		}
+
+	}
+
+
+	search(type,filter,ag){
+		if(type=="distance"){
+
+		}
+	}
+
+
+
+
+	parseCondition(condition){
+		var precond = null;
+		var cond = {};
+		var str = condition.split("/");
+		if(str.length>1){
+			var c = str.split("|");
+			if(c.length>1){
+				cond.filter = str[1];
+			}
+			cond.type = str[0];
+		}
+
+		if(condition.search("/")>-1){
+
+		}
+		if(condition instanceof String){
+
+		}
+	}
+
+	testCondition(condition){
 		if(condition!=null){
-			return true;
+			var c1;
+			var c2;
+			if(condition[1] =="and"){
+				c1 = this.testCondition(condition[0]);
+				c2 = this.testCondition(condition[2]);
+				return c1 && c2
+			} else if (condition[1]=="or"){
+				c1 = this.testCondition(condition[0]);
+				c2 = this.testCondition(condition[2]);
+				return c1 || c2
+			} else {
+				c1 = this.parseCondition(condition[0]);
+				c2 = condition[2];
+				return op[condition[1]](c1,c2);
+			}
+			return false;
 		}
 		return true;
 	}
@@ -54,29 +114,8 @@ class Node extends Entity{
 	}
 
 	toJson(){
-		var js = {
-			UUID: this.UUID,
-			type: this.type,
-			name: this.name,
-			agent: this.agent.toJson(),
-			children: []
-		}
-		for(let c of this.children){
-			js.children.push(c.toJson());
-		}
-		return js;
-	}
-
-	toChart(){
-		var js = {
-			text: {name: this.type},
-			children:[]
-		};
-		if(this.children!=null){
-			for(let c of this.children){
-				js.children.push(c.toChart());
-			}
-		}
+		var js = super.toJson();
+		js.condition = JSON.stringify(this.condition);
 		return js;
 	}
 

@@ -1,32 +1,28 @@
-class Agent extends IAgent{
+class Agent extends Entity{
 
 	init(args){
 		super.init(args);
 		this.type="agent";
 		this.template;
 		this.world;
-		this.behavior;
+		this.children;
 		this.position = [-1,-1];
-		this.color = "#000000";
-		this.sprite;
 		this.nextPosition = null;
 		this.lastPosition = null;
 		this.nextState = null;
-		this.cap = {
-			//"distance" : this.distance
-		}
+		this.state = {
+			color: '#000',
+			sprite: null
+		};
 
 		if(args.world!=null){
 			this.world = args.world;
 		}
-		if(args.sprite!=null){
-			this.sprite=args.sprite;
+		if(args.state!=null){
+			this.state = args.state;
 		}
-		if(args.color!=null){
-			this.color = args.color;
-		}
-		if(args.behavior!=null){
-			this.add(args.behavior);
+		if(args.children!=null){
+			this.children = args.children;
 		}
 		if(args.template!=null){
 			this.template = args.template;
@@ -36,7 +32,6 @@ class Agent extends IAgent{
 		if(args.position!=null){
 			this.position = args.position;
 		}
-
 	}
 
 	add(behavior){
@@ -168,7 +163,10 @@ class Agent extends IAgent{
 
 
 	toJson(){
-
+		var js = super.toJson();
+		js.template = this.template;
+		js.position = this.position;
+		return js;
 	}
 
 

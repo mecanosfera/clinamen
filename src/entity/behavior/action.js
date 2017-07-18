@@ -6,6 +6,7 @@ class Action extends Node{
 		this.target = null;
 		this.condition = null;
 		this.act = null;
+		this.value = null;
 
 		if(node.target!=null){
 			this.target = node.target;
@@ -15,6 +16,9 @@ class Action extends Node{
 		}
 		if(node.act!=null){
 			this.act = node.act;
+		}
+		if(node.value!=null){
+			this.value = node.value;
 		}
 	}
 
@@ -26,12 +30,24 @@ class Action extends Node{
 		return false;
 	}
 
+	move(target,value){
+
+	}
+
+	change(target,value){
+		
+	}
+
+	wait(target,value){
+		return true;
+	}
+
 	run(){
 		//alert(this.act);
 		if(this.testCondition()){
 			return this.agent.act(this.act,this.target,this.condition);
 		}
-		return false; 
+		return false;
 	}
 
 }

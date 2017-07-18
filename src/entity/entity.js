@@ -9,6 +9,7 @@ class Entity {
     this.name = "";
     this.type="entity";
     this.state = {};
+    this.children = [];
 
     if(args!=null){
       if(args.UUID!=null){
@@ -25,5 +26,16 @@ class Entity {
 
   update(){}
 
-  toJson(){}
+  toJson(){
+    var js = {
+			UUID: this.UUID,
+			type: this.type,
+			name: this.name,
+			state: JSON.stringigy(this.state),
+			children: []
+		}
+		for(let c of this.children){
+			js.children.push(c.toJson());
+		}
+  }
 }

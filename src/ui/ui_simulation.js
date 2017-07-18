@@ -53,7 +53,7 @@ class SimulationUI {
   }
 
   draw(){
-    this.grid.draw(this.world);
+    this.grid.draw(this.simulation.world);
   }
 
 

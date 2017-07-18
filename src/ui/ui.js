@@ -44,22 +44,18 @@ class Grid {
     			this.cxt.strokeRect((x*this.tamanhoCelula),(y*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
       }
     }
+    if(world!=null){
+      for(let a of world.children){
+        this.cxt.fillStyle = a.state.color;
+        if(a.state.sprite!=null){
 
-    if(world.started){
-      for(let a of world.agents){
-        this.cxt.fillStyle = '#000000';
-        this.cxt.fillRect(a.position[0]*this.tamanhoCelula,a.position[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
-        this.cxt.strokeRect((a.position[0]*this.tamanhoCelula),(a.position[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
-      }
-    } else {
-      for(let tp in world.templates){
-        for(let pos of world.templates[tp].positions){
-          this.cxt.fillStyle = '#000000';
-          this.cxt.fillRect(pos[0]*this.tamanhoCelula,pos[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
-          this.cxt.strokeRect((pos[0]*this.tamanhoCelula),(pos[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
+        } else {
+          this.cxt.fillRect(a.position[0]*this.tamanhoCelula,a.position[1]*this.tamanhoCelula,this.tamanhoCelula,this.tamanhoCelula);
+          this.cxt.strokeRect((a.position[0]*this.tamanhoCelula),(a.position[1]*this.tamanhoCelula),this.tamanhoCelula,this.tamanhoCelula);
         }
       }
     }
+
 
 	}
 
