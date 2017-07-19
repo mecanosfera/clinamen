@@ -44,6 +44,12 @@ class SimulationUI {
         }
       });
     }
+
+    $("#next").click({self:this,s:this.simulation},function(e){
+        e.data.s.next();
+    });
+
+
   }
 
 

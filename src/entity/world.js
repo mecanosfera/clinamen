@@ -6,6 +6,7 @@ class World extends Entity{
       this.generation = 0;
       this.size = [0,0];
       this.children = [];
+      this.positions = [];
       this.agents = [];
       this.templates = {};
       this.generations = [];
@@ -38,6 +39,12 @@ class World extends Entity{
 
   start(){
     if(this.children.length==0){
+      for(let x=0;x<this.size[0];x++){
+        this.positions.push([]);
+        for(let y=0;y<this.size[1];y++){
+          this.positions[x].push(null);
+        }
+      }
       //alert(this.agents.length);
       for(let a of this.agents){
         var ag = new Agent(this.templates[a.template]);
@@ -49,7 +56,11 @@ class World extends Entity{
         ag.template = a.template;
         ag.position = a.position;
         ag.world = this;
+        if(a.state!=null){
+          ag.state = a.state;
+        }
         this.children.push(ag);
+        this.positions[ag.position[0]][ag.position[1]] = ag;
       }
     }
     //alert(this.children.length);
@@ -77,7 +88,18 @@ class World extends Entity{
   }
 
   get(position){
-      return this.positions[position[0]][position[1]]
+      var p = position;
+      if(position[0]<0){
+        p[0]=this.size[0]-1;
+      } else if (position[0]>=this.size[0]){
+        p[0]=0;
+      }
+      if(position[1]<0){
+        p[1]=this.size[1]-1;
+      } else if (position[1]>=this.size[1]){
+        p[1]=0;
+      }
+      return this.positions[p[0]][p[1]]
   }
 
   toJson(){

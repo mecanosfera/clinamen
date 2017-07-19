@@ -82,87 +82,111 @@ class Limit extends Decorator{
 
 }
 
-//--------------------------------------------------
 
-class Condition extends Decorator{
+class Find extends Decorator{
+
+		init(node){
+			super.init(node);
+			this.type="find";
+			this.template = node.template;
+		}
+
+		run(){
+			var n = this.agent.neighbors();
+			for(let a of n){
+				var ag = this.agent.world.get(a);
+				if(ag!=null){
+					if(ag.template==this.template){
+						return this.child.run();
+					}
+				}
+			}
+			return false;
+		}
+
+}
+
+class Test extends Decorator{
 
 	init(node){
 		super.init(node);
-		this.condition = node.condition;
-		this.type="condition";
+		this.type="test";
+		this.state = node.state;
+		this.op = node.op;
+		this.value = node.value;
+	}
+
+
+	run(){
+		if(op[this.op](this.agent.state[this.state],this.value)){
+			return this.child.run();
+		}
+		return false;
+	}
+}
+
+
+class Count extends Decorator{
+
+	init(node){
+		super.init(node);
+		this.type="count";
+		this.template = null;
+		this.state = null;
+		this.opState = null;
+		this.stateValue = null;
+		this.op = null;
+		this.value = null;
+		if(node.template!=null){
+			this.template = node.template;
+		}
+		if(node.state!=null){
+			this.state = node.state;
+		}
+		if(node.opState!=null){
+			this.opState = node.opState;
+		}
+		if(node.stateValue!=null){
+			this.stateValue = node.stateValue;
+		}
+		if(node.op!=null){
+			this.op = node.op;
+		}
+		if(node.value!=null){
+			this.value = node.value;
+		}
 	}
 
 	run(){
-		if(this.child==null){
-			return false;
+		var n = this.agent.neighbors();
+		var end1 = [];
+		var end2 = [];
+		if(this.template!=null){
+			for(let a of n){
+				if(a.template==this.template){
+					end1.push(a);
+				}
+			}
+		} else {
+			end1 = n;
 		}
-		if(this.testCondition()){
+		if(this.state!=null){
+			for(let a of end1){
+				if(op[this.opState](a.state[this.state],this.stateValue)){
+					end2.push(a);
+				}
+			}
+		} else {
+			end2 = end1;
+		}
+		if(op[this.op](end2.length,this.value)){
 			return this.child.run();
 		}
 		return false;
 	}
 
-	testCondition(){
-		var oper = op[this.condition[0]];
-		var a = this.condition[1];
-		var b = this.condition[2];
-		var a_val = a;
-		var b_val = b;
 
-		if(a instanceof Object){
-			if(a.type=="self"){
-				if(!this.agent.prop[[a.prop]]){
-					return false;
-				} else {
-					a_val = this.agent.prop[[a.prop]];
-				}
-			} else {
-				var ag = this.agent.findAgent(a.type,[a.cap]);
-				if(ag!=null){
-					if(!ag.prop[[a.prop]]){
-						return false;
-					} else {
-						a_val = ag.prop[[a.prop]];
-					}
-				} else {
-					return false;
-				}
-			}
-		}
-		if(b instanceof Object){
-			if(b.type=="self"){
-				if(!this.agent.prop[[b.prop]]){
-					return false;
-				} else {
-					b_val = this.agent.prop[[b.prop]];
-				}
-			} else {
-				var ag = this.agent.findAgent(b.type,[b.cap]);
-				if(ag!=null){
-					if(!ag.prop[[b.prop]]){
-						return false;
-					} else {
-						b_val = ag.prop[[b.prop]];
-					}
-				} else {
-					return false;
-				}
-			}
-		}
-		return oper(a_val,b_val);
-	}
 }
 
 
-
-
-/*
-["==",{type:"self",prop:"hp"},56]
-["==",{type:"enemy",cap:"nearest",attr:"hp"},10]
-
-
-*/
-	//["==",5,6]
-	//[">=",[self,hp],35]
-	//["==",nearest,enemy]
-	//
+//--------------------------------------------------

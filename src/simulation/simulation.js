@@ -34,7 +34,27 @@ class Simulation {
 
 
   next(){
+    for(let a of this.world.children){
+      a.run();
+    }
+    for(let nx of this.world.children){
+      if(nx.nextPosition!=null){
+        this.world.positions[nx.position[0]][nx.position[1]] = null;
+        nx.position = nx.nextPosition;
+        nx.nextPosition = null;
+        this.world.positions[nx.position[0]][nx.position[1]] = nx;
 
+      }
+      if(nx.nextState!=null){
+        
+        for(let s in nx.nextState){
+          nx.state[s] = nx.nextState[s];
+        }
+        nx.nextState = null;
+      }
+    }
+    this.world.generation++;
+    this.draw();
   }
 
   play(){

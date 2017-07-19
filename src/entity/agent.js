@@ -19,10 +19,10 @@ class Agent extends Entity{
 			this.world = args.world;
 		}
 		if(args.state!=null){
-			this.state = args.state;
-		}
-		if(args.children!=null){
-			this.children = args.children;
+			for(let s in args.state){
+				this.state[s] = args.state[s];
+			}
+			//this.state = args.state;
 		}
 		if(args.template!=null){
 			this.template = args.template;
@@ -32,69 +32,66 @@ class Agent extends Entity{
 		if(args.position!=null){
 			this.position = args.position;
 		}
+		if(args.children!=null){
+			//alert(args.children[0].type);
+			for(let c of args.children){
+				//alert(c.type);
+				this.add(c);
+			}
+		}
+
+
 	}
 
 	add(behavior){
+		//alert(behavior);
 		if(behavior instanceof Node){
-			this.behavior = behavior;
+			this.children.push(behavior);
 		} else {
-			this.behavior = NodeConstructor(behavior);
+			this.children.push(NodeConstructor(behavior));
 		}
-		this.behavior.setAgent(this);
+		//alert(this.children.length);
+		//alert(this.children[0] instanceof Action);
+		//alert(this.children[0].type);
+		this.children[0].setAgent(this);
 	}
 
-	distance(target,origin=null){
-		if(origin==null){
-			origin = this.position;
-		}
-		if(target!=null){
-			return Math.sqrt((origin[0]-target[0])+(origin[1]-target[1]));
-		}
-		return -1;
-	}
+
 
 	neighbors(){
+		var n = [];
 		if(this.position!=null){
 			var p0 = this.position[0];
 			var p1 = this.position[1];
-			return [[p0-1,p1],[p0-1,p1+1],[p0,p1+1],[p0+1,p1+1],[p0+1,p1],[p0+1,p1-1],[p0,p1-1],[p0-1,p1-1]];
-		}
-		return [];
-	}
-
-
-	search(type,filter){
-		if(this.world.has(type)){
-			if(filter instanceof String){
-				if(filter=="nearest"){
-					var dist = 999999;
-					var nearest = null;
-					for(a in this.world.agents[type]){
-						if(this.distance(a)<dist){
-							nearest = a;
-						}
-					}
-					return nearest;
-				} else if (filter=="farthest"){
-					var dist = 0;
-					var far = null;
-					for(a in this.world.agents[type]){
-						if(this.distance(a)>dist){
-							far = a;
-						}
-					}
-					return nearest;
-				}//filters
-			} else if (filter instanceof Array){
-
+			n = [
+				[p0-1,p1], //left
+				[p0-1,p1+1], //bottomleft
+				[p0,p1+1], //bottom
+				[p0+1,p1+1], //bottomright
+				[p0+1,p1], //right
+				[p0+1,p1-1], //topright
+				[p0,p1-1], //top
+				[p0-1,p1-1] //topleft
+			];
+			for(let p of n){
+				if(p[0]<0){
+					p[0] = this.world.size[0]-1;
+				} else if(p[0]>=this.world.size[0]){
+					p[0] = 0;
+				}
+				if(p[1]<0){
+					p[1] = this.world.size[1]-1;
+				} else if(p[1]>=this.world.size[1]){
+					p[1] = 0;
+				}
 			}
 		}
-		return null;
+		return n;
 	}
 
-	act(action,target,condition){
+	act(action,value){
 		if(this[action]){
-			return this[action](target,condition);
+			return this[action](value);
 		}
 		return false;
 	}
@@ -104,63 +101,69 @@ class Agent extends Entity{
 	}
 
 	move(target){
-		var p = target;
-		var viz = this.neighbors();
-		if(target instanceof Agent){
-			if(target.position!=null){
-				p = target.position;
-			} else {
-				this.nextPosition = null;
-				return false;
+		var p = [];
+		var n = this.neighbors();
+		if(target=="random"){
+			p = n[Math.floor(Math.random() * 7)];
+		} else {
+			if(target=="left"){
+				p = n[0];
+			} else if (target=="bottomleft"){
+				p= n[1];
+			} else if (target=="bottom"){
+				p= n[2];
+			} else if (target=="bottomright"){
+				p= n[3];
+			} else if (target=="right"){
+				p= n[4];
+			} else if (target=="topright"){
+				p= n[5];
+			} else if (target=="top"){
+				p= n[6];
+			} else if (target=="topleft"){
+				p= n[7];
 			}
-		} else if (target instanceof String){
-
-		} else if (Number.isInteger(target)){
-			viz = [viz[target]];
 		}
-		var dist = 9999;
-		var pos = this.position;
-		for(n of viz){
-			var d = this.distance(p,n);
-			if(d<dist){
-				if(this.world.get(n)==null){
-					dist = d;
-					pos = n;
+
+		if(this.world.positions[p[0]][p[1]]==null){
+			for(let a of this.world.children){
+				if(a.nextPosition==p){
+					return false;
 				}
 			}
-		}
-		if(pos==this.position){
-			this.nextPosition = this.position;
-			return false;
-		} else {
-			this.nextPosition = pos;
+			this.nextPosition = p;
 			return true;
 		}
 		return false;
 	}
 
-	transition(v,all=true){
-		if(all){
-			for(let p in v){
-				if(this.prop[p]=null){
-					return false;
-				}
-			}
-			for(let p in v){
-				this.prop[p] = v[p];
-			}
-		} else {
-			for(let p in v){
-				if(this.prop[p]!=null){
-					this.prop[p] = v[p];
+	change(state){
+		this.nextState = {};
+		for(let s in state){
+			if(this.state[s]!=null){
+				if(state[s] instanceof Array){
+					if(state[s][0]=="+"){
+						this.nextState[s] = this.state[s]+state[s][1];
+					} else {
+						this.nextState[s] = this.state[s]-state[s][1];
+					}
+				} else {
+					this.nextState[s] = state[s];
 				}
 			}
 		}
-	}
+		return true;
 
+	}
 
 	affect(){}
 
+	run(){
+		if(this.children.length>0){
+			return this.children[0].run();
+		}
+		return false;
+	}
 
 	toJson(){
 		var js = super.toJson();
