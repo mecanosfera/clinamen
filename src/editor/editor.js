@@ -6,6 +6,9 @@ class Editor {
 
   init(worlds){
     this.worlds = worlds;
+    for(let w of mundos_aula){
+      this.worlds.push(w);
+    }
     this.world = null;
     this.template = null;
     this.agent = null;
@@ -92,7 +95,7 @@ class Editor {
 
     } else {
       if(entity instanceof Selector){
-        
+
       }
     }
     this.save();
