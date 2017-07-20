@@ -23,6 +23,9 @@ class Simulation {
     for(let w of worlds){
       ws.push(new World(w));
     }
+    for(let w of mundos_aula){
+      ws.push(new World(w));
+    }
     return ws;
   }
 

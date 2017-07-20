@@ -39,13 +39,15 @@ class EditorUI {
     this.library.height($(document).innerHeight());
     this.agent.height($(document).innerHeight());
     for(var w of this.editor.worlds){
-      var templates = $('<ul class="template_list"></ul>');;
-      for(var t of w.templates){
-        var li = $('<li class="template_item">'+t.name+'</li>');
-        li.dblclick({template:t,s:this},function(e){
-          e.data.s.select(e.data.template);
-        });
-        templates.append(li);
+      var templates = $('<ul class="template_list"></ul>');
+      if(w.templates!=null){
+        for(var t of w.templates){
+          var li = $('<li class="template_item">'+t.name+'</li>');
+          li.dblclick({template:t,s:this},function(e){
+            e.data.s.select(e.data.template);
+          });
+          templates.append(li);
+        }
       }
       var world = $('<a href="#" class="world_link">'+w.name+'</a>');
       var world_li = $('<li class="world_item"></li>');
