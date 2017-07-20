@@ -128,7 +128,9 @@ function or(a,b){
 
 
 function NodeConstructor(node){
+	//alert(node.type.toLowerCase());
 	switch(node.type.toLowerCase()){
+
 		case "selector":
 			return new Selector(node);
 		case "sequence":
@@ -141,6 +143,12 @@ function NodeConstructor(node){
 			return new Inverter(node);
 		case "limit":
 			return new Limit(node);
+		case "find":
+			return new Find(node);
+		case "test":
+			return new Test(node);
+		case "count":
+			return new Count(node);
 		case "condition":
 			return new Condition(node);
 		case "action":

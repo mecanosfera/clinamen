@@ -1,225 +1,221 @@
-#editor{
-  background-color: #fff;
+body,html,ul,li,div,span,h3,a{
+  font-family: Inconsolata;
+}
+
+body,html{
   margin: 0px;
   padding: 0px;
-  float: left;
-  font-family: Inconsolata, Courier;
+  overflow: hidden;
 }
 
-#editor .editor_main{
+
+.nav_top{
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    height: 20px;
+    margin: 0px;
+}
+
+.nav_top section{
+  display: inline-block;
+
+}
+
+.world{
   float: left;
 }
 
-#editor_entity{
+.behavior{
   float: left;
-  width: 238px;
-  background-color: #666;
+  display: block;
+  width: 100%;
+}
+
+.behavior_tree{
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+}
+
+.agent{
+  float: right;
+  background-color: #4b4b4b;
+  width: 250px;
+  color: #fff;
+  margin-top: -40px;
   border-left: 1px solid #333;
-  /*border-right: 1px solid #333;*/
+}
+
+.agent .path{
+  padding: 10px;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.list_info{
+  padding:0px;
+  margin: 0px;
+}
+
+.list_info li{
+  list-style: none;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 5px;
+  height: 20px;
+}
+
+.state_edit{
+  margin-left: -5px;
+
+}
+
+.list_info li label, .list_info li span{
+  display: inline-block;
+  height:20px;
+}
+
+.list_info li label{
+  font-weight: bold;
+  color: #a2a2a2;
+}
+
+.state_edit input{
+  border: 1px solid #333;
+  background-color: #666565;
+  height: 20px;
+  padding: 5px;
+  color: #fff;
+  margin-top: 5px;
+  width: 170px;
+  font-family: Inconsolata;
+  font-size: 16px;
+}
+
+.state_edit .save,
+.state_edit .cancel,
+.state_edit .save:visited,
+.state_edit .cancel:visited{
+  text-decoration: none;
+  background-color: #ccc;
+  color: #000;
   padding: 5px;
   padding-top: 0px;
-  padding-left: 10px;
-  color: #ccc;
-}
-
-#editor_entity input{
+  padding-bottom: 0px;
+  text-align:center;
   border: 1px solid #333;
+  border-radius: 10px;
+}
+
+
+.library{
+  width: 175px;
   background-color: #3d3d3d;
-  padding: 2px;
-  min-width: 40px;
-  width: 40px;
-  color: #ccc;
-}
-
-#editor_entity span, #editor_entity a{
-  color: #ccc;
-  text-decoration: none;
-}
-
-#editor_entity a{
-  font-weight: bold;
-}
-
-#editor_entity ul{
-  padding: 0px;
-  margin: 0px;
-}
-
-#editor_entity li{
-  padding: 5px;
-  list-style: none;
-  margin: 0px;
-  padding-left: 0px;
-}
-
-#editor_entity label{
-  color: #fff;
-}
-
-#editor_entity ul#editor_agent_properties_fields, #editor_entity ul#editor_agent_tree_fields{
-  padding-left: 10px;
-}
-
-#editor_entity #editor_entity_type_icon{
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  margin-right: 5px;
-}
-
-#editor_entity #editor_entity_type_icon.agent{
-  background-image: url('../img/agent_white.png');
-}
-
-#editor_entity #editor_entity_type_icon.tree{
-  background-image: url('../img/tree_green.png');
-}
-
-#editor_entity #editor_entity_type_icon.empty_cell{
-  background-image: url('../img/empty_cell_white.png');
-}
-
-
-
-
-#library{
-  width: 250px;
-  background-color: #3d3d3d;
-  /*border: 1px solid #3d3d3d;*/
   float: right;
   color: #fff;
-  /*padding: 10px;
-  padding-top: 0px;*/
   padding:0px;
-  padding-left: 5px;
   border-left: 1px solid #333;
 }
 
-#library h3, #editor_entity #editor_entity_header{
+.library h3, .agent h3{
   background-color: #000;
   font-size: 16px;
-  padding: 8px;
-  margin: 0px;
-  font-size: 14px;
-  padding-left: 10px;
-  color: #fff;
-}
-
-#library h3{
-  margin-left: -5px;
-}
-
-#editor_entity #editor_entity_header{
-  margin-left: -10px;
-  margin-right: -5px;
-  font-size: 16px;
-}
-
-#editor_entity_header label{
-  font-weight: bold;
-}
-
-#editor_entity_header a{
-  font-weight: normal;
-}
-
-
-
-
-#library ul{
-  padding: 0px;
-  padding-left: 10px;
-
-}
-
-#library #library_list {
   padding: 10px;
   margin: 0px;
-  /*border: 1px solid #333;*/
+  font-size: 16px;
+  padding-left: 10px;
+  color: #fff;
+  height: 20px;
+  margin-left: -5px;
+  display: none;
 }
 
-#library ul li{
+
+.list_world {
+  padding: 0px;
+  margin: 0px;
+  /*margin-top: 20px;*/
+}
+
+.template_item,.world_item{
   padding: 0px;
   margin: 0px;
   list-style: none;
   font-size: 14px;
   vertical-align: top;
-  padding: 5px;
-  padding-left: 0px;
-  /*display: inline-block;
-  text-align:center;
-  border-radius: 5px;*/
 }
 
-#library ul li span.icon_entity{
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-}
 
-#library ul li a{
+
+.library a{
   color: #fff;
   text-decoration: none;
   height: 15px;
   font-size: 15px;
-  margin: 5px;
-  margin-top: 0px;
   vertical-align: top;
+  display: block;
 }
 
-#library ul li span.icon_entity{
-  background-image: url('../img/tree_green.png');
+.library{
+  margin-top: -40px;
 }
 
-#library ul li span.icon_entity.world{
-  background-image: url('../img/world_grey.png');
-}
-
-#library ul li span.icon_entity.agent{
-  background-image: url('../img/agent_white.png');
-}
-
-/*#library li.world{
-  background-color: #000;
-}
-
-#library li.agent{
-  background-color: #ccc;
-}
-
-#library li.selector{
-  background-color: #ff00ff;
-}
-
-#library li.condition{
-  background-color: #ff0000;
-}
-
-#library li.action{
-  background-color: #fff;
-}*/
-
-
-#editor_info_world{
-  background-color: #000;
-  color: #fff;
-  padding: 8px;
-  padding-left: 10px;
-  font-size: 14px;
-}
-
-#editor_info_world label{
-  font-weight: bold;
+.world_item {
   padding: 0px;
+  border-bottom: 1px solid #333;
 }
 
-#editor_info_world span{
+.template_item, .world_link{
+  padding: 10px;
+  cursor: pointer;
+}
+
+.template_item:hover, .world_link:hover{
+  text-decoration: underline;
+
+}
+
+.world_link.selected{
+  background-color: #ccc;
+  font-weight: bold;
+  color: #000;
+}
+
+.template_list{
+  padding-left: 20px;
+}
+
+.bt_new{
+  padding: 10px;
+  font-weight:bold;
+  font-size: 16px;
+  background-color: #181818;
+  color: #fff;
+  text-align: center;
+  cursor:pointer;
+  height: 20px;
+}
+
+.bt_new:hover{
+  background-color: #5e5e5e;
+  color: #000;
+  text-decoration: underline;
+
+}
+
+.world_behavior{
+  position: relative;
+  /*background-color: #ff0000;*/
+  float:left;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.world_behavior .bt_new{
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: inline-block;
-  margin-right: 30px;
-  font-size: 14px;
-}
-
-#editor_world_grid{
-  margin: 10px;
-  border: 1px solid #666;
+  width: 100px;
 }
