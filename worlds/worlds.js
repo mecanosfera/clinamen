@@ -160,5 +160,218 @@ var worlds = [
         ]
       }
     ]
-  }
+  },
+
+  {
+    type:"world",
+    name:"game_of_life",
+    size:[20,20],
+    agents:[],
+    templates:[
+      {
+        type:"agent",
+        name:"celula",
+        state:{
+          color: "#ccc",
+          vivo: 0
+        },
+        children:[
+          {
+            type:"selector",
+            children:[
+              {
+                type:"test",
+                state:"vivo",
+                op:"==",
+                value:0,
+                child: {
+                  type:"count",
+                  template:"celula",
+                  state:"vivo",
+                  opState:"==",
+                  stateValue:1,
+                  op:"==",
+                  value:3,
+                  child: {
+                    type:"action",
+                    act:"change",
+                    value: {
+                      vivo: 1,
+                      color: "#000"
+                    }
+                  }
+                }
+
+              },
+
+              {
+                type:"test",
+                state:"vivo",
+                op:"==",
+                value:1,
+                child: {
+                  type:"selector",
+                  children:[
+                    {
+                      type:"count",
+                      template:"celula",
+                      state:"vivo",
+                      opState:"==",
+                      stateValue:1,
+                      op:"<",
+                      value:2,
+                      child: {
+                        type:"action",
+                        act:"change",
+                        value: {
+                          vivo: 0,
+                          color: "#fff"
+                        }
+                      }
+                    },
+                    {
+                      type:"count",
+                      template:"celula",
+                      state:"vivo",
+                      opState:"==",
+                      stateValue:1,
+                      op:">",
+                      value:3,
+                      child: {
+                        type:"action",
+                        act:"change",
+                        value: {
+                          vivo: 0,
+                          color: "#fff"
+                        }
+                      }
+                    }
+
+                  ]
+                }
+              }
+
+
+            ]//selector.children
+          }//selector
+        ]//celula.children
+      }//celula
+    ]//templates
+  }//game_of_life
 ];
+
+
+for(let x=0;x<worlds[1].size[0];x++){
+  for(let y=0;y<worlds[1].size[1];y++){
+    worlds[1].agents.push({
+      template:"celula",
+      name: "celula_"+x+"_"+y,
+      position: [x,y]
+    });
+  }
+}
+
+
+worlds[1].agents[3].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[4].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[5].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[6].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[7].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[8].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[14].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[15].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[16].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[17].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[23].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[24].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[25].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[26].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[27].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[28].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+
+
+worlds[1].agents[45].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+
+worlds[1].agents[48].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+worlds[1].agents[65].state = {
+  vivo: 1,
+  color: "#000"
+};
+
+
+worlds[1].agents[68].state = {
+  vivo: 1,
+  color: "#000"
+};

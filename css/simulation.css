@@ -50,3 +50,11 @@ body{
   color: #000;
   font-weight: bold;
 }
+
+#speed{
+  width: 30px;
+  border: 1px solid #333;
+  background-color: #ccc;
+  padding: 5px;
+  margin-left: 5px;
+}

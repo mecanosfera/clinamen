@@ -4,124 +4,185 @@ class EditorUI {
     this.init(args);
   }
 
-  updateSize(){
-    var editorEntityWidth = 0;
-    if(!$('#editor_entity').is(':hidden')){
-      editorEntityWidth = $('#editor_entity').outerWidth();
-    }
-    this.el.width($(document).innerWidth());
-    this.el.height($(document).innerHeight()-$("#top").outerHeight(true));
-    $(".editor_main").width(this.el.width()-$("#library").outerWidth()-editorEntityWidth);
-    $("#library").height(this.el.height());
-    $("#editor_entity").height(this.el.height()-5);
-  }
+  init(editor){
+    this.editor = editor;
+    this.world = $('#world');
+    this.behavior = $('#behavior');
+    this.agent = $('#agent');
+    this.template = $('#template');
+    this.agents = $('#agents');
+    this.library = $('#library');
+    this.zoom = 1;
+    this.grid = new Grid(this,"world_grid",null);
+    this.editTemplate = null;
+    this.editWorld = null;
+    this.editBehavior = null;
+    this.mode="grid";
 
-  init(args){
-    this.editor = args.editor;
-    this.grid;
-    this.el = $("#editor");
-    this.em = new EntityMenu(this);
-    $("#editor_main_start").show();
-    $("#editor_main_edit_world").hide();
-    $("#editor_main_edit_tree").hide();
-    $("#world_grid").hide();
-    $("#editor_entity").hide();
-    this.updateSize();
-    $('window').resize(this.updateSize);
+    this.start();
   }
-
 
   start(){
-    var ed = $("#editor");
-    $("#bt_criar_mundo").click(this,function(evt){
-      evt.data.editor.edit(null,"world");
-      evt.data.edit("world");
-      evt.data.em.add(evt.data.editor.world);
+    var me = this;
+    $(".world_behavior").width($(document).innerWidth()-this.library.outerWidth()-this.agent.outerWidth());
+    $(".world_behavior").height($(document).innerHeight()-$('#info').outerHeight());
+    $("#mode_button").click({s:this},function(e){
+      var me = e.data.s;
+      if(me.mode=="grid"){
+        me.changeMode("behavior");
+      } else {
+        me.changeMode("grid");
+      }
     });
+    this.world.hide();
+    this.behavior.hide();
+    this.library.height($(document).innerHeight());
+    this.agent.height($(document).innerHeight());
+    for(var w of this.editor.worlds){
+      var templates = $('<ul class="template_list"></ul>');;
+      for(var t of w.templates){
+        var li = $('<li class="template_item">'+t.name+'</li>');
+        li.dblclick({template:t,s:this},function(e){
+          e.data.s.select(e.data.template);
+        });
+        templates.append(li);
+      }
+      var world = $('<a href="#" class="world_link">'+w.name+'</a>');
+      var world_li = $('<li class="world_item"></li>');
+      /*world.click({t:templates},function(e){
+        e.data.t.toggle();
+      });*/
+      world.dblclick({s:this,wr:w},function(e){
+        $('.template_list .selected').removeClass('selected');
+        $(this).addClass('selected');
+        e.data.s.select(e.data.wr);
+      });
+      world_li.append(world);
+      world_li.append(templates);
+      //templates.hide();
+      $('#library_list').append(world_li);
+    }
   }
 
-  edit(type){
-    var eent = '#editor_entity';
+  changeMode(mode){
+    if(mode=="behavior"){
+      this.mode="behavior";
+      this.world.hide();
+      this.behavior.show();
+      $("#mode_button").text("mundo");
+    } else {
+      this.mode="grid";
+      this.world.show();
+      this.behavior.hide();
+      $("#mode_button").text("comportamento");
+    }
+  }
+
+  select(entity){
+    if(entity.type=="world"){
+      this.editor.select(entity);
+      this.editWorld = entity;
+      this.mode = "grid";
+      this.world.show();
+      this.behavior.hide();
+      this.grid = new Grid(this,"world_grid",this.editor.world.size);
+      this.grid.draw(this.editor.world);
+    } else if (entity.type=="agent"){
+      //console.log(entity);
+      this.editor.select(entity);
+      this.editTemplate = entity;
+      this.showTemplate(this.editTemplate);
+      this.changeMode("behavior");
+      if(this.editTemplate.children.length>0){
+        this.editor.select(this.editTemplate.children[0]);
+        this.editBehavior = this.editTemplate.children[0];
+        this.showBehavior(this.editor.behavior);
+      }
+    }
+  }
+
+  showTemplate(entity){
+    $('.path').text(this.editWorld.name+'/'+entity.name);
+    $('#template_info').empty();
+    var me = this;
+    Object.keys(entity.state).forEach(function(s){
+      var v = [s,entity.state[s]];
+      var li = $('<li></li>');
+      var lbl = $('<label>'+s+':</label>');
+      var val = $('<span>'+entity.state[s]+'</span>');
+      if(s!='x' && s!='y'){
+        var edit = $('<div class="state_edit"></div>');
+        var input = $('<input type="text" value="'+s+':'+entity.state[s]+'" />');
+        var save = $('<a href="#" class="save">=</a>');
+        var cancel = $('<a href="#" class="cancel">x</a>');
+        li.dblclick(function(e){
+          lbl.hide();
+          val.hide();
+          edit.show();
+        });
+        save.click({t:me,en:entity},function(e){
+          if(input.val()!=""){
+            var str = input.val().split(':');
+            e.data.t.editor.update(e.data.en,str[0],s,str[1]);
+            lbl.html(str[0]+":");
+            val.html(str[1]);
+            lbl.show();
+            val.show();
+            edit.hide();
+            v = [s,entity.state[s]];
+          } else {
+            e.data.t.editor.update(e.data.en,s,v[0],null);
+            $('#template_info').remove(li);
+          }
+        });
+        cancel.click({},function(e){
+          lbl.html(v[0]+":");
+          val.html(v[1]);
+          input.val(v[0]+":"+v[1]);
+          lbl.show();
+          val.show();
+          edit.hide();
+        });
+      }
+      edit.append(input);
+      edit.append(save);
+      edit.append(cancel);
+      li.append(lbl);
+      li.append(val);
+      li.append(edit);
+      $('#template_info').append(li);
+      edit.hide();
+    });
+
+  }
+
+  editTemplate(entity){
+
+  }
+
+  showBehavior(behavior){
+    $('#behavior_tree').empty();
+    generateBehaviorTree(behavior,$('#behavior_tree'));
+  }
+
+  create(type){
     if(type=="world"){
-      $("#editor_main_edit_world").show();
-      $("#editor_main_start").hide();
-      $("#editor_main_behavior").hide();
-      var world = this.editor.world;
-      if(world.name!=null){
-        $("#editor_world_name").text(world.name);
+      if(this.editWorld=null){
+        this.editWorld = world;
+        this.mode = "grid";
+        this.world.show();
+        this.behavior.hide();
+        this.grid = new Grid();
       }
-      if(world.size!=null && world.size.length>0 && world.size[0]>0 && world.size[1]>0){
-        $("#editor_world_size").text(world.size[0]+","+world.size[1]);
-        this.grid = new Grid(this,"editor_world_grid",world.size);
-        this.grid.draw(world);
-      } else {
-        $("#editor_world_size").text("[0,0]");
-      }
-      this.updateSize();
-    } else if (type=="agent"){
-      //$('#editor_entity h3').text('agente');
-      $('#editor_entity').show();
-      $('#editor_agent').show();
-      $('#editor_empty_cell').hide();
-      $('#editor_tree').hide();
-      this.updateSize();
-
-      $('#editor_entity_type_icon').attr('className','agent');
-      $('#editor_entity_name').text(this.editor.agent.name);
-      if(this.editor.agent.world!=null){
-        $('#editor_entity_parent').text(this.editor.agent.world.name);
-      } else {
-        $('#editor_entity_parent').text('');
-      }
-      $('#editor_entity_type').text('agente');
-
-
-      if(this.editor.agent.name!=null){
-        $('#editor_agent_name_txt').hide();
-      } else {
-        $('#editor_agent_name_txt').show();
-      }
-
-      if(this.editor.agent.world!=null){
-        //$('#editor_agent_world').text(this.editor.agent.world.name);
-        $('#editor_agent_position').text('x:'+this.editor.agent.position[0]+' y:'+this.editor.agent.position[1]);
-      }
-
-
-      for(let p in this.editor.agent.prop){
-        var pvalue = this.editor.agent.prop[p];
-        if(typeof pvalue === "string"){
-          pvalue = '"'+pvalue+'"';
-        }
-        $('#editor_agent_properties_fields').append('<li><label>'+p+':</label><span class="editor_agent_property">'+pvalue+'</span></li>');
-      }
-
-    } else if (type=="empty_cell") {
-      //$('#editor_entity h3').text('célula vazia');
-      $('#editor_entity').show();
-      $('#editor_agent').hide();
-      $('#editor_empty_cell').show();
-      $('#editor_tree').hide();
-      this.updateSize();
-
-      $('#editor_empty_cell_world').text(this.editor.world.name);
-      $('#editor_empty_cell_position').text('x:'+this.editor.selectedPosition[0]+' y:'+this.editor.selectedPosition[1]);
-    } else { //tree
-      $("#editor_main_edit_world").hide();
-      $("#editor_main_edit_tree").show();
-
-      var tree = new NodeUI(this.editor.tree, $('#editor_tree_edit'), this.editor.world);
-      //this.em.addNode(this.editor.tree, $('#editor_tree_edit'));
-      //alert(JSON.stringify(this.editor.generateTreeConfig(this.editor.tree)));
-      //this.chart = new Treant(this.editor.generateTreeConfig(this.editor.tree),function(){alert('x')},$);
-
-      //$('#editor_entity h3').value('comportamento');
+    } else if (type=="template"){
 
     }
   }
 
 
-  updateFileTree(){
 
-  }
+
+
+
+
 }

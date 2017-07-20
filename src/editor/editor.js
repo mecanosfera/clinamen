@@ -4,36 +4,36 @@ class Editor {
     this.init(args);
   }
 
-  init(args){
-    this.worlds = [];
-    this.agents = [];
-    this.behaviors = [];
-    this.simulation = null;
-    this.selectedPosition = [-1,-1];
-
-    this.world;
-    this.agent;
-    this.tree;
-
-    if(args.worlds!=null){
-      this.worlds = args.worlds;
-    }
-    if(args.simulation!=null){
-      this.simulation = args.simulation;
-    }
-    this.open = [];
+  init(worlds){
+    this.worlds = worlds;
+    this.world = null;
+    this.template = null;
+    this.agent = null;
+    this.behavior = null;
+    this.ui = new EditorUI(this);
   }
 
   start(){}
 
-  select(){}
+  select(entity){
+    console.log(entity);
+    if(entity.type=="world"){
+      this.world = new World(entity);
+      this.world.start();
+    } else if (entity.type=="agent"){
+      this.template = entity;
+    } else  {
+      //console.log(entity);
+      this.behavior = NodeConstructor(entity);
+    }
+  }
 
   edit(entity,type){
     if(type=="world"){
       this.world = entity;
-      if(entity==null){
+      /*if(entity==null){
         this.world = new World(teste1);
-      }
+      }*/
     } else if (type=="agent"){
       this.agent = entity;
 
@@ -60,71 +60,49 @@ class Editor {
 
 
 
-  update(entity){}
-}
+  update(entity,state,oldState,value){
+    if(entity.type=="agent"){
+      if(entity instanceof Agent){
 
-
-var teste1 = {
-	UUID: 34354446546546,
-	type: "world",
-	name: "teste1",
-	size: [20,20],
-	generation: 0,
-	agents: [
-		{
-			UUID: 454554654645654,
-			name: "um",
-      template: "teste",
-			position: [10,15],
-			prop: {
-				hp: 35
-			},
-			tree: {
-				type: "selector",
-				children: [
-          {
-  					type: "condition",
-  					condition: ["==",{target:"self",prop:"hp"},25],
-  					child: {
-  						type: "selector",
-  						children: [
-  							{
-  								type: "action",
-  								act: "move",
-  								target: "enemy",
-  								condition: "nearest"
-  							},
-  							{
-  								type: "action",
-  								act: "wait",
-  								target: "self"
-  							}
-  						]
-  					}
-          },
-          {
-  					type: "condition",
-            name: "teste",
-  					condition: ["!=",{target:"self",prop:"hp"},25],
-  					child: {
-  						type: "selector",
-  						children: [
-  							{
-  								type: "action",
-  								act: "move",
-  								target: "enemy",
-  								condition: "nearest"
-  							},
-  							{
-  								type: "action",
-  								act: "wait",
-  								target: "self"
-  							}
-  						]
-  					}
+      } else {
+        if(state=="name"){
+          this.template.name = value;
+        } else {
+          if(value==null){
+            delete this.template[oldState];
+          } else {
+            if(state!=oldState){
+              delete this.template[oldState];
+            }
+            if(value=="null"){
+              this.template.state[state] = null;
+            } else if (value=="false"){
+              this.template.state[state] = false;
+            } else if (value=="true"){
+              this.template.state[state] = true;
+            } else if (value.search('"')>-1){
+              this.template.state[state] = value;
+            } else {
+              this.templtate.state[state] = parseInt(value);
+            }
           }
-				]
-			}
-		}
-	]
+        }
+      }
+    } else if (entity.type=="world"){
+
+    } else {
+      if(entity instanceof Selector){
+        
+      }
+    }
+    this.save();
+  }
+
+  save(){
+    if(this.world!=null){
+
+    }
+  }
+
+
 }

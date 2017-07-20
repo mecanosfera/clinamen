@@ -13,6 +13,7 @@ class Simulation {
     this.zoom = 1;
     this.delay = 1;
     this.size = [0,0];
+    this.speed = 500;
 
     this.ui = new SimulationUI([this]);
   }
@@ -46,7 +47,7 @@ class Simulation {
 
       }
       if(nx.nextState!=null){
-        
+
         for(let s in nx.nextState){
           nx.state[s] = nx.nextState[s];
         }
@@ -55,18 +56,26 @@ class Simulation {
     }
     this.world.generation++;
     this.draw();
+    if(this.running){
+      var self = this;
+      setTimeout(function(){self.next();},this.speed);
+    }
   }
 
   play(){
-
-  }
-
-  pause(){
-
+    if(!this.running){
+      //alert('xxx');
+      this.speed = parseInt($('#speed').val());
+      this.running = true;
+      this.next();
+    }
   }
 
   stop(){
-
+    if(this.running){
+      this.running = false;
+      clearTimeout();
+    }
   }
 
   update(){

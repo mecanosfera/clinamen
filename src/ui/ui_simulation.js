@@ -46,9 +46,20 @@ class SimulationUI {
     }
 
     $("#next").click({self:this,s:this.simulation},function(e){
-        e.data.s.next();
+        if(!e.data.s.running){
+          e.data.s.next();
+        }
     });
 
+    $("#play").click({self:this,s:this.simulation},function(e){
+        e.data.s.play();
+    });
+
+    $("#stop").click({self:this,s:this.simulation},function(e){
+        e.data.s.stop();
+    });
+
+    $("#speed").val(this.simulation.speed);
 
   }
 

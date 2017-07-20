@@ -344,13 +344,55 @@ btCancel.click(function(){
 
 
   if(node instanceof Decorator){
-    if(node instanceof Condition){
-      if(node.child!=null){
-        generateBehaviorTree(node.child,ul);
-      }
+    if(node.child!=null){
+      generateBehaviorTree(node.child,ul);
+    }
+    if(node instanceof Find){
+      var inTemplate = $('<div class="edit_field"><span>template:</span><input type="text" class="field" name="template" value="'+node.template+'" /></div>');
+      editArea.append(inTemplate);
+    } else if (node instanceof Test){
+      var inState  = $('<div class="edit_field"><span>estado:</span><input type="text" class="field" name="state" value="'+node.state+'" /></div>');
+      var inOp  = $('<div class="edit_field"><span>operador:</span><input type="text" class="field" name="op" value="'+node.op+'" /></div>');
+      var inValue  = $('<div class="edit_field"><span>valor:</span><input type="text" class="field" name="value" value="'+node.value+'" /></div>');
+      editArea.append(inState);
+      editArea.append(inOp);
+      editArea.append(inValue);
+    } else if (node instanceof Count){
+      var inTemplate = $('<div class="edit_field"><span>template:</span><input type="text" class="field" name="template" value="'+node.template+'" /></div>');
+      var inState  = $('<div class="edit_field"><span>estado:</span><input type="text" class="field" name="state" value="'+node.state+'" /></div>');
+      var inOpState  = $('<div class="edit_field"><span>op estado:</span><input type="text" class="field" name="opstate" value="'+node.opState+'" /></div>');
+      var inStateValue  = $('<div class="edit_field"><span>val estado:</span><input type="text" class="field" name="stateValue" value="'+node.stateValue+'" /></div>');
+      var inOp  = $('<div class="edit_field"><span>operador:</span><input type="text" class="field" name="op" value="'+node.op+'" /></div>');
+      var inValue  = $('<div class="edit_field"><span>quantidade:</span><input type="text" class="field" name="value" value="'+node.value+'" /></div>');
+      editArea.append(inTemplate);
+      editArea.append(inState);
+      editArea.append(inOpState);
+      editArea.append(inStateValue);
+      editArea.append(inOp);
+      editArea.append(inValue);
     }
   } else if (node instanceof Action){
-
+    var inTarget  = $('<div class="edit_field"><span>alvo:</span><input type="text" class="field" name="target" value="'+node.target+'" /></div>');
+    var inAct  = $('<div class="edit_field"><span>ação:</span><input type="text" class="field" name="act" value="'+node.act+'" /></div>');
+    var val = '';
+    if(node.value instanceof Object){
+      Object.keys(node.value).forEach(function(k){
+        if(val!=''){
+          val+=',';
+        }
+        if(node.value[k] instanceof Array){
+          val+= k+":["+node.value[k][0]+','+node.value[k][1]+']';
+        } else {
+          val+= k+":"+node.value[k];
+        }
+      });
+    } else {
+      val = node.value;
+    }
+    var inValue  = $('<div class="edit_field"><span>valor:</span><input type="text" class="field" name="value" value="'+val+'" /></div>');
+    editArea.append(inTarget);
+    editArea.append(inAct);
+    editArea.append(inValue);
   } else {
       if(node.children.length>0){
         for(let c of node.children){

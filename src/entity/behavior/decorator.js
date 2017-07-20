@@ -118,7 +118,11 @@ class Test extends Decorator{
 
 
 	run(){
+		if(this.agent.state.vivo==1){
+			//console.log(this.agent.name+": "+this.agent.state[this.state]+" - "+this.value);
+		}
 		if(op[this.op](this.agent.state[this.state],this.value)){
+			//console.log('xxx');
 			return this.child.run();
 		}
 		return false;
@@ -158,17 +162,25 @@ class Count extends Decorator{
 	}
 
 	run(){
+
 		var n = this.agent.neighbors();
+		var agents = [];
+		for(let a of n){
+			var r = this.agent.world.get(a);
+			if(r!=null){
+				agents.push(r);
+			}
+		}
 		var end1 = [];
 		var end2 = [];
 		if(this.template!=null){
-			for(let a of n){
+			for(let a of agents){
 				if(a.template==this.template){
 					end1.push(a);
 				}
 			}
 		} else {
-			end1 = n;
+			end1 = agents;
 		}
 		if(this.state!=null){
 			for(let a of end1){
