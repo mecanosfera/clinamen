@@ -29,17 +29,18 @@ class SimulationUI {
       var li = $('<li></li>');
       li.append(a);
       this.worldsList.append(li);
-      a.click({self:this,sim:this.simulation},function(e){
+      a.click({self:this,sim:this.simulation,l:li},function(e){
         var sim = e.data.sim;
         var self = e.data.self;
+        var lii = e.data.l;
         if(sim.world==null && sim.world!=w){
           sim.select(w);
-          self.selectedWorldLi = li;
-          li.addClass('selected');
+          self.selectedWorldLi = lii;
+          lii.addClass('selected');
         } else {
           self.selectedWorldLi.removeClass('selected');
-          self.selectedWorldLi = li;
-          li.addClass("selected");
+          self.selectedWorldLi = lii;
+          lii.addClass("selected");
           sim.select(w);
         }
       });

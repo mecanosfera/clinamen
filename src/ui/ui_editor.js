@@ -55,7 +55,7 @@ class EditorUI {
         e.data.t.toggle();
       });*/
       world.dblclick({s:this,wr:w},function(e){
-        $('.template_list .selected').removeClass('selected');
+        $('.list_world .selected').removeClass('selected');
         $(this).addClass('selected');
         e.data.s.select(e.data.wr);
       });

@@ -225,3 +225,42 @@
 #behavior .section.condition2{
   padding-bottom: 0px;
 }
+
+#behavior .node_menu.test{
+  background-color: #2e3263;
+}
+
+#behavior .node_menu.find{
+  background-color: #2e632f;
+}
+
+#behavior .node_menu.count{
+  background-color: #633e2e;
+}
+
+#behavior .node_menu.selector{
+  background-color: #e7e41d;
+}
+
+#behavior .node_menu.action{
+  background-color: #ff0000;
+}
+
+.field{
+  border: 1px solid #333;
+  padding: 5px;
+  height: 15px;
+  width: 140px;
+  border-radius: 5px;
+  font-family: Inconsolata;
+}
+
+.edit_field{
+  margin-bottom: 5px;
+}
+.edit_field span{
+  width: 80px;
+  margin-right: 5px;
+  text-align: right;
+  font-size: 14px;
+}
