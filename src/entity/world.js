@@ -59,6 +59,8 @@ class World extends Entity{
         if(a.state!=null){
           ag.state = a.state;
         }
+        ag.state.x = ag.position[0];
+        ag.state.y = ag.position[1];
         this.children.push(ag);
         this.positions[ag.position[0]][ag.position[1]] = ag;
       }

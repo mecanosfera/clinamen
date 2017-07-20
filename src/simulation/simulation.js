@@ -56,6 +56,9 @@ class Simulation {
         }
         nx.nextState = null;
       }
+      nx.state.x = nx.position[0];
+      nx.state.y = nx.position[1];
+      //console.log(nx.state);
     }
     this.world.generation++;
     this.draw();
