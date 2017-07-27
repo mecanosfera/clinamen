@@ -218,4 +218,27 @@ body,html{
   right: 10px;
   display: inline-block;
   width: 130px;
+  z-index:15;
+}
+
+
+
+#world_behavior svg{
+  position: absolute;
+  z-index: 0;
+}
+
+#world_behavior{
+  position:relative;
+}
+
+.world_behavior section{
+  position:relative;
+  z-index: 10;
+}
+
+
+.node label{
+  background-color: #fff;
+  padding: 3px;
 }

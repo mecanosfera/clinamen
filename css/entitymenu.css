@@ -264,3 +264,7 @@
   text-align: right;
   font-size: 14px;
 }
+
+#behavior .section.name{
+  display:none;
+}

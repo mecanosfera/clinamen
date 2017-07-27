@@ -286,7 +286,7 @@ class NodeUI {
 }
 
 
-function generateBehaviorTree(node,parent){
+function generateBehaviorTree(node,parent,paper){
   var prnt = parent;
   var li = $('<li class="node '+node.type+'"></li>');
   var nav = $('<nav class="node_menu '+node.type+'"></nav>');
@@ -328,6 +328,7 @@ function generateBehaviorTree(node,parent){
     } else {
       nav.addClass("selected");
     }
+    drawLines(paper);
   });
 
 btEdit.click(function(){
@@ -336,16 +337,18 @@ btEdit.click(function(){
   } else {
     nav.addClass("edit_mode");
   }
+  drawLines(paper);
 });
 
 btCancel.click(function(){
-
+  nav.removeClass('edit_mode');
+  drawLines(paper);
 });
 
 
   if(node instanceof Decorator){
     if(node.child!=null){
-      generateBehaviorTree(node.child,ul);
+      generateBehaviorTree(node.child,ul,paper);
     }
     if(node instanceof Find){
       var inTemplate = $('<div class="edit_field"><span>template:</span><input type="text" class="field" name="template" value="'+node.template+'" /></div>');
@@ -397,10 +400,35 @@ btCancel.click(function(){
       if(node.children.length>0){
         for(let c of node.children){
           //draw line
-          generateBehaviorTree(c,ul);
+          generateBehaviorTree(c,ul,paper);
         }
       }
   }
 
   return li;
+}
+
+
+function drawLines(paper){
+  paper.clear();
+  paper.setSize($('#behavior_tree').outerWidth(),$('#behavior_tree').outerHeight());
+  $('.node_menu.action').each(function(i,e){
+    drawLine(e,paper);
+  });
+  //drawLine($('li.node.selector nav.node_menu')[0],paper);
+}
+
+function drawLine(el,paper){
+
+  var p = $($(el).parent().parent().parent());
+  console.log(p);
+  //console.log('M'+$(el).offset().left);
+  //console.log('M'+($(el).offset().left+($(el).outerWidth()/2))+','+$(el).offset().top+' L'+(pnav.offset().left+(pnav.outerWidth()/2))+','+(pnav.offset().top+pnav.outerHeight()));
+  if(p.attr('id')!='behavior'){
+    var pnav = $(p.find('nav.node_menu')[0]);
+    //console.log(pnav);
+    //paper.path('M'+($(el).offset().left+($(el).outerWidth()/2))+','+($(el).offset().top-$(el).outerHeight())+' L'+(pnav.offset().left+(pnav.outerWidth()/2))+','+(pnav.offset().top));
+    paper.path('M'+($(el).offset().left+($(el).outerWidth()/2))+','+($(el).offset().top-40)+' L'+(pnav.offset().left+(pnav.outerWidth()/2))+','+(pnav.offset().top));
+    drawLine(pnav,paper);
+  }
 }

@@ -18,6 +18,7 @@ class EditorUI {
     this.editWorld = null;
     this.editBehavior = null;
     this.mode="grid";
+    this.paper;
 
     this.start();
   }
@@ -29,8 +30,10 @@ class EditorUI {
     $("#mode_button").click({s:this},function(e){
       var me = e.data.s;
       if(me.mode=="grid"){
+        drawLines(me.paper);
         me.changeMode("behavior");
       } else {
+        me.paper.clear();
         me.changeMode("grid");
       }
     });
@@ -54,15 +57,24 @@ class EditorUI {
       /*world.click({t:templates},function(e){
         e.data.t.toggle();
       });*/
+      this.paper = Raphael(document.getElementById('world_behavior'),$('#world_behavior').width()-5,$('#world_behavior').height()-5);
       world.dblclick({s:this,wr:w},function(e){
+
         $('.list_world .selected').removeClass('selected');
         $(this).addClass('selected');
         e.data.s.select(e.data.wr);
+        e.data.s.paper.clear();
       });
       world_li.append(world);
       world_li.append(templates);
       //templates.hide();
       $('#library_list').append(world_li);
+
+      $('#world_behavior svg').css({
+        position:'absolute',
+        top:0,
+        left:0
+      });
     }
   }
 
@@ -164,7 +176,8 @@ class EditorUI {
 
   showBehavior(behavior){
     $('#behavior_tree').empty();
-    generateBehaviorTree(behavior,$('#behavior_tree'));
+    generateBehaviorTree(behavior,$('#behavior_tree'),this.paper);
+    drawLines(this.paper);
   }
 
   create(type){
