@@ -2,7 +2,7 @@
   "name": "clinamen",
   "version": "0.0.1",
   "description": "Behavior-tree editor and simulator",
-  "main": "server.js",
+  "main": "clinamen.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/mecanosfera/clinamen#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
-    "express": "^4.15.3",
-    "mongodb": "^2.2.30",
+    "express": "^4.15.4",
     "mongoose": "^4.11.5",
     "morgan": "^1.8.2",
     "passport": "^0.3.2",
