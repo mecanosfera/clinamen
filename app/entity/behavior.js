@@ -2,7 +2,8 @@ class Behavior extends Entity{
 
 	init(args){
 		super.init(args);
-		this.type='behavior';
+		this.mainType = 'behavior';
+		this.type = 'behavior';
 		this.temp = args.temp || true;
 		this.agent = args.agent || null;
 		this.children = [];
@@ -31,7 +32,7 @@ class Behavior extends Entity{
 	add(behavior){
 		var child = behavior;
 		if(!(behavior instanceof Behavior)){
-			child = behaviorConstructor(behavior);
+			child = this.behaviorConstructor(behavior);
 		}
 		child.setAgent(this.agent);
 		this.children.push(child);
@@ -90,7 +91,7 @@ class RandomSelector extends Behavior {
 	}
 
 	run(iterator=false){
-		var rchildren = shuffle(this.children);
+		var rchildren = this.shuffle(this.children);
 		for(let c of rchildren){
 			if(c.run(iterator)){
 				return true;
@@ -109,7 +110,7 @@ class RandomSequence extends Behavior {
 	}
 
 	run(iterator=false){
-		var rchildren = shuffle(this.children);
+		var rchildren = this.shuffle(this.children);
 		for(let c of rchildren){
 			if(!c.run(iterator)){
 				return false;

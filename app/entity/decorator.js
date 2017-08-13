@@ -2,8 +2,12 @@ class Decorator extends Behavior{
 
 	init(args){
 		super.init(args);
+		this.mainType = 'decorator';
 		this.type = 'decorator';
 		this.result = args.result || null;
+		this.filter = args.filter || null;
+		this.child = null;
+		setChildren(args);
 	}
 
 	setChildren(behavior){
@@ -26,24 +30,31 @@ class Decorator extends Behavior{
 	add(behavior){
 		var child = behavior;
 		if(!(behavior instanceof Behavior)){
-			child = behaviorConstructor(behavior);
+			child = this.behaviorConstructor(behavior);
 		}
 		child.setAgent(this.agent);
 		this.child = child;
 	}
 
 	//arrumar
-	traverse(obj){
-		var k = obj.keys();
-		if(obj[k[0]] instanceof Object && !(obj[k[0]] instanceof Array)){
-			return this.traverse(obj[k[0]]);
+	traverse(obj,filter){
+		var fk = Object.keys(filter);
+		if(obj[fk[0]]!=null){
+			if(obj[fk[0]] instanceof Object && !(obj[fk[0]] instanceof Array)){
+				return this.traverse(obj[fk[0]],filter[fk[0]]);
+			} else {
+				return obj[fk[0]];
+			}
 		}
-		return obj[k[0]];
+		return null;
+
 	}
 
 	toJson(){
 		var js = super.toJson();
 		js.child = this.child.toJson();
+		js.filter = JSON.stringify(this.filter);
+		js.result = JSON.stringify(this.result);
 		return js;
 	}
 
@@ -66,13 +77,12 @@ class Inverter extends Decorator{
 
 }
 
-//----------------------------------------
 
 class Limit extends Decorator{
 
 	init(args){
 		super.init(args);
-		this.type= 'limit';
+		this.type = 'limit';
 		this.max = node.max || 0;
 		this.runs = 0;
 	}
@@ -108,8 +118,8 @@ class Find extends Decorator{
 		}
 
 		run(iterator=false){
-			if(this.temp){
-				this.res = {};
+			if(this.agent.temp && this.result!=null){
+				this.agent.res[this.result] = null;
 			}
 			var res = null;
 			if(this.scope=='world'){
@@ -120,18 +130,15 @@ class Find extends Decorator{
 			if(this.result!=null){
 				this.agent.res[this.result] = res;
 			}
-			if(res!=null){
-				return true;
+			if(res!=null && this.child!=null){
+				return this.child.run(iterator);
 			}
 			return false;
-
 		}
 
 		toJson(){
 			var js = super.toJson();
-			js.filter = JSON.stringify(this.filter);
 			js.scope = this.scope;
-			js.result = JSON.stringify(this.result);
 			return js;
 		}
 
@@ -139,76 +146,51 @@ class Find extends Decorator{
 
 class Test extends Decorator{
 
+	//{res/prop:?, op:'==', val/res/prop:?}
 	init(args){
 		super.init(args);
 		this.type = 'test';
-		this.filter = args.filter;
 	}
 
-	/*{
-		res:teste,
-		op:'>',
-		value:{res:{celula:{prop:vivo}}}}
-		*/
 	run(iterator=false){
+		var v1 = this.traverse(this.agent,{Object.keys(this.filter)[0]:this.filter[Object.keys(this.filter)[0]]});
+		var v2 = this.filter.val || this.traverse(this.agent,{Object.keys(this.filter)[2]:this.filter[Object.keys(this.filter)[2]]});
 
-
-
-		if(op[this.op](this.agent.prop[this.propName],this.propValue)){
+		if(this.op[this.filter.op](v1,v2) && this.child!=null){
 			return this.child.run(iterator);
 		}
 		return false;
 	}
 
-	toJson(){
-		var js = super.toJson();
-		js.propName = this.propName;
-		js.op = this.op;
-		js.propValue = this.propValue;
-		return js;
-	}
-
 }
 
 
-class Count extends Decorator{
+class Count extends Decorator {
 
+	//{res/prop:?}
 	init(args){
 		super.init(args);
 		this.type = "count";
-		this.target = args.target || 'self';
-		this.filter = args.filter;
 	}
 
 	run(iterator=false){
 		if(this.agent.temp && this.result!=null){
-			this.agent.res[this.resault] = null;
+			this.agent.res[this.result] = null;
 		}
-		var target = this.agent;
-		if(this.target!='self'){
-			//{prop:val}
-			var tk = this.target.keys();
-			if(this.agent[tk[0]][this.target[tk[0]]]!=null){
-				target = this.agent[tk[0]][this.target[tk[0]]];
-			}
-			return false;
-		}
-		var k = this.filter.keys();
+
 		var c = null;
-		if(target[k[0]][this.filter[k[0]]]!=null){
-			c = target[k[0]][this.filter[k[0]]].length;
-		}
-		if(this.result!=null){
-			this.agent.res[this.result] = c;
-		}
-		if(c!=null){
-			return true;
+		c = this.traverse(this.agent,this.filter);
+		if(c!=null && c instanceof Array){
+			if(this.result!=null){
+				this.agent.prop[this.result] = c.length;
+			}
+			if(this.child!=null){
+				return this.child.run(iterator);
+			} else {
+				return false;
+			}
 		}
 		return false;
 	}
 
-
 }
-
-
-//--------------------------------------------------
